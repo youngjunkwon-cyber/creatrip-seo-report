@@ -5,190 +5,188 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Creatrip SEO 분석 리포트</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #0d0d0d;
-    --surface: #161616;
-    --surface2: #1e1e1e;
-    --border: rgba(255,255,255,0.08);
-    --border2: rgba(255,255,255,0.14);
-    --text-primary: #f0ede8;
-    --text-secondary: #9a9690;
-    --text-muted: #5a5754;
-    --accent: #4f7cff;
-    --accent-light: rgba(79,124,255,0.12);
-    --accent-dim: rgba(79,124,255,0.06);
-    --green: #3ecf8e;
-    --green-light: rgba(62,207,142,0.12);
-    --amber: #f5a623;
-    --amber-light: rgba(245,166,35,0.12);
-    --red: #f06060;
-    --pink: #e879a0;
+    --bg: #f8f7f5;
+    --surface: #ffffff;
+    --surface2: #f2f1ef;
+    --border: rgba(0,0,0,0.08);
+    --border2: rgba(0,0,0,0.14);
+    --text-primary: #111110;
+    --text-secondary: #4a4945;
+    --text-muted: #9a9690;
+    --accent: #2952cc;
+    --accent-light: rgba(41,82,204,0.08);
+    --accent-dim: rgba(41,82,204,0.05);
+    --green: #1a6b3c;
+    --green-light: rgba(26,107,60,0.08);
+    --amber: #8a4500;
+    --amber-light: rgba(138,69,0,0.08);
+    --pink: #8b1f5c;
+    --pink-light: rgba(139,31,92,0.08);
+    --purple: #5b2d8e;
+    --purple-light: rgba(91,45,142,0.08);
   }
 
   html { scroll-behavior: smooth; }
-
   body {
     font-family: 'Pretendard', -apple-system, sans-serif;
     background: var(--bg);
     color: var(--text-primary);
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Layout */
-  .container { max-width: 1080px; margin: 0 auto; padding: 0 20px 60px; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 24px 80px; }
 
   /* Header */
   .header {
-    padding: 40px 20px 32px;
-    max-width: 1080px;
-    margin: 0 auto;
+    background: var(--surface);
     border-bottom: 1px solid var(--border);
+    padding: 36px 24px 32px;
     margin-bottom: 40px;
   }
-  .header-inner { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+  .header-inner { max-width: 1080px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
   .header-badge {
     display: inline-block;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--accent);
-    background: var(--accent-dim);
-    border: 1px solid rgba(79,124,255,0.2);
+    background: var(--accent-light);
+    border: 1px solid rgba(41,82,204,0.15);
     padding: 4px 10px;
     border-radius: 4px;
     margin-bottom: 10px;
     font-family: 'DM Mono', monospace;
   }
   .header h1 {
-    font-size: clamp(20px, 4vw, 28px);
+    font-size: clamp(22px, 4vw, 30px);
     font-weight: 700;
     letter-spacing: -0.03em;
     line-height: 1.2;
     color: var(--text-primary);
   }
-  .header-meta { font-size: 12px; color: var(--text-muted); font-family: 'DM Mono', monospace; line-height: 1.8; text-align: right; }
+  .header-meta { font-size: 13px; color: var(--text-muted); font-family: 'DM Mono', monospace; line-height: 1.9; text-align: right; }
 
   /* Section */
-  .section { margin-bottom: 48px; }
+  .section { margin-bottom: 52px; }
   .section-label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--text-muted);
     margin-bottom: 16px;
     font-family: 'DM Mono', monospace;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
   }
   .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-  /* Summary card */
+  /* Summary */
   .summary-card {
-    background: linear-gradient(135deg, #1a1f35 0%, #161616 50%, #1a2a1f 100%);
-    border: 1px solid var(--border2);
+    background: var(--text-primary);
     border-radius: 16px;
-    padding: clamp(20px, 4vw, 36px);
-    margin-bottom: 48px;
+    padding: clamp(24px, 4vw, 40px);
+    margin-bottom: 52px;
+    color: #fff;
   }
-  .summary-card h2 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-bottom: 24px; }
-  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+  .summary-card h2 { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 28px; letter-spacing: -0.02em; }
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
   .summary-item h3 {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--text-muted);
+    color: rgba(255,255,255,0.4);
     margin-bottom: 8px;
     font-family: 'DM Mono', monospace;
   }
-  .summary-item p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
-  .summary-item p strong { color: var(--text-primary); font-weight: 600; }
+  .summary-item p { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.75; }
+  .summary-item p strong { color: #fff; font-weight: 600; }
 
   /* Metrics */
-  .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
   .metric-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 20px;
-    transition: border-color 0.2s;
+    padding: 22px 20px;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .metric-card:hover { border-color: var(--border2); }
-  .metric-card.primary { border-color: rgba(79,124,255,0.25); background: var(--accent-dim); }
-  .metric-label { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; font-family: 'DM Mono', monospace; }
-  .metric-value { font-size: 28px; font-weight: 700; letter-spacing: -0.04em; font-family: 'DM Mono', monospace; color: var(--text-primary); }
+  .metric-card:hover { border-color: var(--border2); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .metric-card.primary { border-color: rgba(41,82,204,0.2); background: var(--accent-dim); }
+  .metric-label { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; font-family: 'DM Mono', monospace; }
+  .metric-value { font-size: 32px; font-weight: 700; letter-spacing: -0.04em; font-family: 'DM Mono', monospace; color: var(--text-primary); line-height: 1; }
   .metric-card.primary .metric-value { color: var(--accent); }
-  .metric-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
-  .metric-desc { font-size: 11px; color: var(--text-secondary); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); line-height: 1.6; }
+  .metric-sub { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+  .metric-desc { font-size: 12px; color: var(--text-secondary); margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); line-height: 1.65; }
 
   /* Chart */
   .chart-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: clamp(16px, 3vw, 28px);
+    padding: clamp(20px, 3vw, 32px);
   }
   .chart-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
-  .chart-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
-  .chart-sub { font-size: 12px; color: var(--text-muted); }
-  .chart-badge { font-size: 11px; color: var(--text-muted); background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; font-family: 'DM Mono', monospace; white-space: nowrap; }
+  .chart-title { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; letter-spacing: -0.01em; }
+  .chart-sub { font-size: 13px; color: var(--text-muted); }
+  .chart-badge { font-size: 12px; color: var(--text-muted); background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-family: 'DM Mono', monospace; white-space: nowrap; }
   .chart-wrap { position: relative; height: clamp(160px, 25vw, 220px); }
   .callout {
-    background: var(--accent-dim);
+    background: var(--accent-light);
     border-left: 3px solid var(--accent);
     border-radius: 0 8px 8px 0;
-    padding: 12px 16px;
-    margin-top: 16px;
-    font-size: 12px;
+    padding: 14px 18px;
+    margin-top: 20px;
+    font-size: 13px;
     color: var(--text-secondary);
-    line-height: 1.7;
+    line-height: 1.75;
   }
-  .callout strong { color: var(--accent); font-weight: 600; }
+  .callout strong { color: var(--accent); font-weight: 700; }
 
   /* Country */
-  .country-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; margin-bottom: 16px; }
+  .country-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-bottom: 16px; }
   .country-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 10px;
-    padding: 14px 16px;
+    padding: 16px 18px;
     transition: border-color 0.2s;
   }
   .country-card:hover { border-color: var(--border2); }
   .country-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-  .country-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
-  .country-pct { font-size: 14px; font-weight: 700; font-family: 'DM Mono', monospace; color: var(--accent); }
-  .bar-track { background: var(--surface2); border-radius: 4px; height: 4px; overflow: hidden; }
-  .bar-fill { height: 4px; border-radius: 4px; }
-  .country-meta { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; color: var(--text-muted); font-family: 'DM Mono', monospace; }
+  .country-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+  .country-pct { font-size: 15px; font-weight: 700; font-family: 'DM Mono', monospace; color: var(--accent); }
+  .bar-track { background: var(--surface2); border-radius: 4px; height: 5px; overflow: hidden; }
+  .bar-fill { height: 5px; border-radius: 4px; }
+  .country-meta { display: flex; justify-content: space-between; margin-top: 10px; font-size: 12px; color: var(--text-muted); font-family: 'DM Mono', monospace; }
   .info-box {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 10px;
-    padding: 14px 18px;
-    font-size: 12px;
+    padding: 16px 20px;
+    font-size: 13px;
     color: var(--text-secondary);
     line-height: 1.8;
   }
-  .info-box strong { color: var(--text-primary); font-weight: 600; }
+  .info-box strong { color: var(--text-primary); font-weight: 700; }
 
   /* Tabs */
   .tab-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
   .tabs { display: flex; gap: 6px; flex-wrap: wrap; }
   .tab {
-    padding: 7px 16px;
+    padding: 8px 18px;
     border-radius: 8px;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 500;
     cursor: pointer;
     border: 1px solid var(--border);
@@ -198,7 +196,7 @@
     font-family: 'Pretendard', sans-serif;
   }
   .tab:hover { border-color: var(--border2); color: var(--text-primary); }
-  .tab.active { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
+  .tab.active { background: var(--text-primary); color: #fff; border-color: var(--text-primary); font-weight: 600; }
   .tab-content { display: none; }
   .tab-content.active { display: block; }
 
@@ -206,8 +204,8 @@
   .search-wrap { position: relative; }
   .search-input {
     width: 200px;
-    padding: 7px 10px 7px 30px;
-    font-size: 12px;
+    padding: 8px 12px 8px 32px;
+    font-size: 13px;
     border: 1px solid var(--border);
     border-radius: 8px;
     background: var(--surface);
@@ -218,7 +216,7 @@
   }
   .search-input::placeholder { color: var(--text-muted); }
   .search-input:focus { border-color: var(--accent); }
-  .search-icon { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--text-muted); pointer-events: none; }
+  .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--text-muted); pointer-events: none; }
 
   /* Table */
   .table-card {
@@ -227,13 +225,13 @@
     border-radius: 12px;
     overflow: hidden;
   }
-  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
   thead th {
     background: var(--surface2);
-    padding: 10px 14px;
+    padding: 11px 16px;
     text-align: left;
-    font-size: 10px;
-    font-weight: 600;
+    font-size: 11px;
+    font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-muted);
@@ -242,43 +240,44 @@
     white-space: nowrap;
   }
   tbody td {
-    padding: 10px 14px;
+    padding: 11px 16px;
     border-bottom: 1px solid var(--border);
     color: var(--text-primary);
     vertical-align: middle;
+    font-size: 13px;
   }
   tbody tr:last-child td { border-bottom: none; }
   tbody tr:hover td { background: var(--surface2); }
   tbody tr.hidden { display: none; }
 
   /* Badges */
-  .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; font-family: 'DM Mono', monospace; }
+  .badge { display: inline-block; padding: 3px 9px; border-radius: 5px; font-size: 12px; font-weight: 700; font-family: 'DM Mono', monospace; }
   .badge-top { background: var(--green-light); color: var(--green); }
   .badge-mid { background: var(--accent-light); color: var(--accent); }
-  .badge-low { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border); }
+  .badge-low { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
 
   /* Tags */
-  .tag { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 10px; font-weight: 500; background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border); }
-  .tag-beauty { background: rgba(232,121,160,0.12); color: var(--pink); border-color: rgba(232,121,160,0.2); }
-  .tag-info { background: var(--accent-light); color: var(--accent); border-color: rgba(79,124,255,0.2); }
-  .tag-food { background: rgba(245,166,35,0.12); color: var(--amber); border-color: rgba(245,166,35,0.2); }
-  .tag-travel { background: var(--green-light); color: var(--green); border-color: rgba(62,207,142,0.2); }
-  .tag-shopping { background: rgba(168,85,247,0.12); color: #b97fff; border-color: rgba(168,85,247,0.2); }
-  .tag-exchange { background: rgba(245,166,35,0.12); color: var(--amber); border-color: rgba(245,166,35,0.2); }
-  .tag-kpop { background: rgba(232,121,160,0.12); color: var(--pink); border-color: rgba(232,121,160,0.2); }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
+  .tag-beauty { background: var(--pink-light); color: var(--pink); border-color: rgba(139,31,92,0.15); }
+  .tag-info { background: var(--accent-light); color: var(--accent); border-color: rgba(41,82,204,0.15); }
+  .tag-food { background: var(--amber-light); color: var(--amber); border-color: rgba(138,69,0,0.15); }
+  .tag-travel { background: var(--green-light); color: var(--green); border-color: rgba(26,107,60,0.15); }
+  .tag-shopping { background: var(--purple-light); color: var(--purple); border-color: rgba(91,45,142,0.15); }
+  .tag-exchange { background: var(--amber-light); color: var(--amber); border-color: rgba(138,69,0,0.15); }
+  .tag-kpop { background: var(--pink-light); color: var(--pink); border-color: rgba(139,31,92,0.15); }
 
-  .vol { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); }
-  .num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); }
+  .vol { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text-muted); }
+  .num { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text-muted); }
 
   .table-note {
-    font-size: 11px;
+    font-size: 13px;
     color: var(--text-secondary);
-    padding: 12px 16px;
+    padding: 14px 18px;
     background: var(--surface2);
     border-top: 1px solid var(--border);
-    line-height: 1.7;
+    line-height: 1.75;
   }
-  .table-note strong { color: var(--text-primary); font-weight: 600; }
+  .table-note strong { color: var(--text-primary); font-weight: 700; }
 
   /* Mobile */
   @media (max-width: 640px) {
@@ -287,13 +286,10 @@
     .summary-grid { grid-template-columns: 1fr; }
     .metric-grid { grid-template-columns: repeat(2, 1fr); }
     .country-grid { grid-template-columns: 1fr; }
-    table { font-size: 11px; }
-    thead th, tbody td { padding: 8px 10px; }
-    .search-input { width: 150px; }
-    .tab { padding: 6px 12px; font-size: 11px; }
-    /* 모바일에서 테이블 가로 스크롤 */
+    .tab-header { flex-direction: column; align-items: flex-start; }
+    .search-input { width: 100%; }
     .table-card { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    table { min-width: 500px; }
+    table { min-width: 520px; }
   }
 </style>
 </head>
@@ -398,32 +394,32 @@
     <div class="country-grid">
       <div class="country-card">
         <div class="country-header"><span class="country-name">🇰🇷 한국</span><span class="country-pct">17.7%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:100%; background:#4f7cff;"></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%; background:#2952cc;"></div></div>
         <div class="country-meta"><span>유입 21,600</span><span>키워드 12,600개</span></div>
       </div>
       <div class="country-card">
         <div class="country-header"><span class="country-name">🇯🇵 일본</span><span class="country-pct">14.1%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:79%; background:#6b96ff;"></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:79%; background:#4a72d4;"></div></div>
         <div class="country-meta"><span>유입 17,200</span><span>키워드 13,400개</span></div>
       </div>
       <div class="country-card">
         <div class="country-header"><span class="country-name">🇹🇼 대만</span><span class="country-pct">13.5%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:76%; background:#89b0ff;"></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:76%; background:#7099e0;"></div></div>
         <div class="country-meta"><span>유입 16,500</span><span>키워드 10,900개</span></div>
       </div>
       <div class="country-card">
         <div class="country-header"><span class="country-name">🇹🇭 태국</span><span class="country-pct">8.1%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:45%; background:#3ecf8e;"></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:45%; background:#1a6b3c;"></div></div>
         <div class="country-meta"><span>유입 9,800</span><span>키워드 24,000개</span></div>
       </div>
       <div class="country-card">
         <div class="country-header"><span class="country-name">🇭🇰 홍콩</span><span class="country-pct">7.0%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:39%; background:#5acba0;"></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:39%; background:#3a8a58;"></div></div>
         <div class="country-meta"><span>유입 8,500</span><span>키워드 9,700개</span></div>
       </div>
       <div class="country-card">
         <div class="country-header"><span class="country-name">🌐 기타</span><span class="country-pct">39.7%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:100%; background:#3a3a3a;"></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%; background:#c8c6be;"></div></div>
         <div class="country-meta"><span>유입 48,400</span><span>키워드 291,500개</span></div>
       </div>
     </div>
@@ -436,12 +432,11 @@
   <!-- Keywords -->
   <div class="section">
     <div class="section-label">국가별 상위 키워드 Top 100 — 구글 검색 노출 순위 기준</div>
-
     <div class="tab-header">
       <div class="tabs">
-        <button class="tab active" onclick="switchTab('us',this)">🇺🇸 미국 <span style="opacity:.6;font-size:10px;">72K개 중</span></button>
-        <button class="tab" onclick="switchTab('jp',this)">🇯🇵 일본 <span style="opacity:.6;font-size:10px;">18K개 중</span></button>
-        <button class="tab" onclick="switchTab('tw',this)">🇹🇼 대만 <span style="opacity:.6;font-size:10px;">15K개 중</span></button>
+        <button class="tab active" onclick="switchTab('us',this)">🇺🇸 미국 <span style="opacity:.5;font-size:11px;">72K개 중</span></button>
+        <button class="tab" onclick="switchTab('jp',this)">🇯🇵 일본 <span style="opacity:.5;font-size:11px;">18K개 중</span></button>
+        <button class="tab" onclick="switchTab('tw',this)">🇹🇼 대만 <span style="opacity:.5;font-size:11px;">15K개 중</span></button>
       </div>
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
@@ -539,7 +534,7 @@
             <tr><td class="num">82</td><td>incheon international airport</td><td class="vol">6,600</td><td><span class="badge badge-low">22위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
             <tr><td class="num">83</td><td>10 day weather seoul korea</td><td class="vol">480</td><td><span class="badge badge-low">21위</span></td><td><span class="tag tag-info">실용</span></td></tr>
             <tr><td class="num">84</td><td>mrs queen</td><td class="vol">540</td><td><span class="badge badge-low">30위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
-            <tr><td class="num">85</td><td>gimpo airport (2nd url)</td><td class="vol">2,400</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">85</td><td>gimpo airport (2nd)</td><td class="vol">2,400</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
             <tr><td class="num">86</td><td>aterrizaje</td><td class="vol">1,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
             <tr><td class="num">87</td><td>korean high school</td><td class="vol">480</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">정보</span></td></tr>
             <tr><td class="num">88</td><td>create trip</td><td class="vol">110</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">브랜드</span></td></tr>
@@ -586,9 +581,9 @@
             <tr><td class="num">14</td><td>キムミンジェ (김민재)</td><td class="vol">12,100</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
             <tr><td class="num">15</td><td>韓国 カフェ (카페)</td><td class="vol">12,100</td><td><span class="badge badge-low">25위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
             <tr><td class="num">16</td><td>弘大 (홍대)</td><td class="vol">12,100</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-            <tr><td class="num">17</td><td>韓国 ダイソー (다이소)</td><td class="vol">10,800</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-            <tr><td class="num">18</td><td>韓国 ダイソー (3위)</td><td class="vol">10,800</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-            <tr><td class="num">19</td><td>韓国 ダイソー (10위)</td><td class="vol">10,800</td><td><span class="badge badge-mid">10위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">17</td><td>韓国 ダイソー (다이소) 1위</td><td class="vol">10,800</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">18</td><td>韓国 ダイソー 3위</td><td class="vol">10,800</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">19</td><td>韓国 ダイソー 10위</td><td class="vol">10,800</td><td><span class="badge badge-mid">10위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
             <tr><td class="num">20</td><td>韓国語 悪口 (한국어 욕)</td><td class="vol">9,900</td><td><span class="badge badge-mid">15위</span></td><td><span class="tag tag-info">정보</span></td></tr>
             <tr><td class="num">21</td><td>韓国 コンビニ (편의점) 1위</td><td class="vol">9,900</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용</span></td></tr>
             <tr><td class="num">22</td><td>韓国 コンビニ 11위</td><td class="vol">9,900</td><td><span class="badge badge-mid">11위</span></td><td><span class="tag tag-info">실용</span></td></tr>
@@ -660,16 +655,16 @@
             <tr><td class="num">88</td><td>仁川 空港 arex 乗り場</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
             <tr><td class="num">89</td><td>naver map 日本 語</td><td class="vol">590</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">실용</span></td></tr>
             <tr><td class="num">90</td><td>韓国 花</td><td class="vol">1,000</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">정보</span></td></tr>
-            <tr><td class="num">91</td><td>ヴィンチェンツォ ロケ地 (2위)</td><td class="vol">390</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
+            <tr><td class="num">91</td><td>ジェニー v 熱愛写真</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
             <tr><td class="num">92</td><td>韓国 苗字 ランキング (15위)</td><td class="vol">1,100</td><td><span class="badge badge-mid">15위</span></td><td><span class="tag tag-info">정보</span></td></tr>
             <tr><td class="num">93</td><td>椿の花咲く頃 (1위)</td><td class="vol">5,700</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
             <tr><td class="num">94</td><td>ロッテ マート (16위)</td><td class="vol">9,900</td><td><span class="badge badge-mid">16위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
             <tr><td class="num">95</td><td>韓国 カフェ (25위)</td><td class="vol">12,100</td><td><span class="badge badge-low">25위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
             <tr><td class="num">96</td><td>キング ザ ランド ロケ 地 (var)</td><td class="vol">480</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
-            <tr><td class="num">97</td><td>ジェニー v 熱愛写真</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
-            <tr><td class="num">98</td><td>ヒュンダイ ソウル フロア マップ</td><td class="vol">590</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-            <tr><td class="num">99</td><td>韓国 ブランド (27위)</td><td class="vol">9,900</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-            <tr><td class="num">100</td><td>naver map (5위)</td><td class="vol">8,100</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">97</td><td>ヒュンダイ ソウル フロア マップ</td><td class="vol">590</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">98</td><td>韓国 ブランド (27위)</td><td class="vol">9,900</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">99</td><td>naver map (5위)</td><td class="vol">8,100</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">100</td><td>韓国 ポーズ (var)</td><td class="vol">320</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
           </tbody>
         </table>
         <div class="table-note">
@@ -806,14 +801,14 @@ new Chart(document.getElementById('trafficChart'), {
     datasets: [{
       label: '월 유입 클릭',
       data: traffic,
-      borderColor: '#4f7cff',
-      backgroundColor: 'rgba(79,124,255,0.06)',
+      borderColor: '#2952cc',
+      backgroundColor: 'rgba(41,82,204,0.05)',
       fill: true,
       tension: 0.4,
       pointRadius: months.map((m,i) => i >= 9 && i <= 11 ? 6 : 3),
-      pointBackgroundColor: months.map((m,i) => i >= 9 && i <= 11 ? '#4f7cff' : 'rgba(79,124,255,0.5)'),
+      pointBackgroundColor: months.map((m,i) => i >= 9 && i <= 11 ? '#2952cc' : 'rgba(41,82,204,0.4)'),
       pointBorderColor: 'transparent',
-      borderWidth: 2,
+      borderWidth: 2.5,
       pointHoverRadius: 6
     }]
   },
@@ -823,25 +818,25 @@ new Chart(document.getElementById('trafficChart'), {
     plugins: {
       legend: { display: false },
       tooltip: {
-        backgroundColor: '#1e1e1e',
-        borderColor: 'rgba(255,255,255,0.1)',
+        backgroundColor: '#fff',
+        borderColor: 'rgba(0,0,0,0.1)',
         borderWidth: 1,
         titleColor: '#9a9690',
-        bodyColor: '#f0ede8',
-        padding: 10,
+        bodyColor: '#111110',
+        padding: 12,
         callbacks: { label: ctx => '유입 클릭: ' + ctx.parsed.y.toLocaleString() + '회' }
       }
     },
     scales: {
       x: {
-        grid: { color: 'rgba(255,255,255,0.04)' },
-        ticks: { color: '#5a5754', font: { size: 11, family: 'DM Mono' }, autoSkip: false, maxRotation: 0 }
+        grid: { color: 'rgba(0,0,0,0.04)' },
+        ticks: { color: '#9a9690', font: { size: 12, family: 'DM Mono' }, autoSkip: false, maxRotation: 0 }
       },
       y: {
-        grid: { color: 'rgba(255,255,255,0.04)' },
+        grid: { color: 'rgba(0,0,0,0.04)' },
         ticks: {
-          color: '#5a5754',
-          font: { size: 11, family: 'DM Mono' },
+          color: '#9a9690',
+          font: { size: 12, family: 'DM Mono' },
           callback: v => v >= 1000 ? (v/1000).toFixed(0) + 'K' : v
         },
         min: 0
@@ -862,8 +857,7 @@ function switchTab(id, el) {
 function filterKeywords(val) {
   const q = val.toLowerCase();
   const activeTab = document.querySelector('.tab-content.active');
-  const rows = activeTab.querySelectorAll('tbody tr');
-  rows.forEach(row => {
+  activeTab.querySelectorAll('tbody tr').forEach(row => {
     row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
   });
 }
