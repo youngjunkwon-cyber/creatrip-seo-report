@@ -5,165 +5,338 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Creatrip SEO 분석 리포트</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
   :root {
-    --bg: #f5f4f0; --surface: #ffffff; --border: #e2e0da;
-    --text-primary: #1a1917; --text-secondary: #6b6960; --text-muted: #9d9b94;
-    --accent: #2952cc; --accent-light: #e8edf9;
-    --green: #2a7a4b; --green-light: #e6f4ec;
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --surface2: #1e1e1e;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text-primary: #f0ede8;
+    --text-secondary: #9a9690;
+    --text-muted: #5a5754;
+    --accent: #4f7cff;
+    --accent-light: rgba(79,124,255,0.12);
+    --accent-dim: rgba(79,124,255,0.06);
+    --green: #3ecf8e;
+    --green-light: rgba(62,207,142,0.12);
+    --amber: #f5a623;
+    --amber-light: rgba(245,166,35,0.12);
+    --red: #f06060;
+    --pink: #e879a0;
   }
-  body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text-primary); font-size: 14px; line-height: 1.6; padding: 40px 24px; }
-  .container { max-width: 980px; margin: 0 auto; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Layout */
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 20px 60px; }
 
   /* Header */
-  .header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1.5px solid var(--text-primary); }
-  .header-left h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 4px; }
-  .header-left p { font-size: 12px; color: var(--text-muted); font-family: 'DM Mono', monospace; }
-  .header-right { text-align: right; font-size: 11px; color: var(--text-muted); font-family: 'DM Mono', monospace; line-height: 1.8; }
+  .header {
+    padding: 40px 20px 32px;
+    max-width: 1080px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+  .header-inner { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+  .header-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-dim);
+    border: 1px solid rgba(79,124,255,0.2);
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-family: 'DM Mono', monospace;
+  }
+  .header h1 {
+    font-size: clamp(20px, 4vw, 28px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    color: var(--text-primary);
+  }
+  .header-meta { font-size: 12px; color: var(--text-muted); font-family: 'DM Mono', monospace; line-height: 1.8; text-align: right; }
 
   /* Section */
-  .section { margin-bottom: 36px; }
-  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; font-family: 'DM Mono', monospace; }
+  .section { margin-bottom: 48px; }
+  .section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    font-family: 'DM Mono', monospace;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-  /* Divider */
-  .divider { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+  /* Summary card */
+  .summary-card {
+    background: linear-gradient(135deg, #1a1f35 0%, #161616 50%, #1a2a1f 100%);
+    border: 1px solid var(--border2);
+    border-radius: 16px;
+    padding: clamp(20px, 4vw, 36px);
+    margin-bottom: 48px;
+  }
+  .summary-card h2 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-bottom: 24px; }
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+  .summary-item h3 {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    font-family: 'DM Mono', monospace;
+  }
+  .summary-item p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+  .summary-item p strong { color: var(--text-primary); font-weight: 600; }
 
-  /* Report summary */
-  .report-summary { background: var(--text-primary); border-radius: 12px; padding: 28px 32px; margin-bottom: 36px; color: #fff; }
-  .report-summary h2 { font-size: 16px; font-weight: 700; margin-bottom: 20px; color: #fff; letter-spacing: -0.01em; }
-  .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .report-item h3 { font-size: 12px; font-weight: 700; color: #aaa; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; font-family: 'DM Mono', monospace; }
-  .report-item p { font-size: 13px; color: #ddd; line-height: 1.7; }
-  .report-item p strong { color: #fff; font-weight: 700; }
-
-  /* Metric grid */
-  .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 32px; }
-  .metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 16px; }
-  .metric-card.highlight { background: var(--text-primary); }
-  .metric-card .label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
-  .metric-card.highlight .label { color: #888; }
-  .metric-card .value { font-size: 24px; font-weight: 700; letter-spacing: -0.03em; font-family: 'DM Mono', monospace; }
-  .metric-card.highlight .value { color: #fff; }
-  .metric-card .sub { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
-  .metric-card.highlight .sub { color: #aaa; }
-  .metric-card .desc { font-size: 11px; color: var(--text-muted); margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); line-height: 1.6; }
-  .metric-card.highlight .desc { color: #888; border-top-color: #333; }
+  /* Metrics */
+  .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  .metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+  .metric-card:hover { border-color: var(--border2); }
+  .metric-card.primary { border-color: rgba(79,124,255,0.25); background: var(--accent-dim); }
+  .metric-label { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; font-family: 'DM Mono', monospace; }
+  .metric-value { font-size: 28px; font-weight: 700; letter-spacing: -0.04em; font-family: 'DM Mono', monospace; color: var(--text-primary); }
+  .metric-card.primary .metric-value { color: var(--accent); }
+  .metric-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+  .metric-desc { font-size: 11px; color: var(--text-secondary); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); line-height: 1.6; }
 
   /* Chart */
-  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-bottom: 16px; }
-  .chart-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
-  .chart-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
-  .chart-sub { font-size: 11px; color: var(--text-muted); }
-  .chart-badge { font-size: 11px; color: var(--text-muted); background: var(--bg); border-radius: 6px; padding: 6px 10px; text-align: right; line-height: 1.6; white-space: nowrap; }
-  .chart-wrap { position: relative; height: 200px; }
-
-  /* Callout */
-  .callout { background: var(--accent-light); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 14px; font-size: 12px; color: #1a2f6b; line-height: 1.7; }
-  .callout strong { font-weight: 700; }
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: clamp(16px, 3vw, 28px);
+  }
+  .chart-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+  .chart-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+  .chart-sub { font-size: 12px; color: var(--text-muted); }
+  .chart-badge { font-size: 11px; color: var(--text-muted); background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; font-family: 'DM Mono', monospace; white-space: nowrap; }
+  .chart-wrap { position: relative; height: clamp(160px, 25vw, 220px); }
+  .callout {
+    background: var(--accent-dim);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+  .callout strong { color: var(--accent); font-weight: 600; }
 
   /* Country */
-  .country-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-  .country-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .country-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; margin-bottom: 16px; }
+  .country-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    transition: border-color 0.2s;
+  }
+  .country-card:hover { border-color: var(--border2); }
   .country-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-  .country-name { font-size: 13px; font-weight: 500; }
-  .country-pct { font-size: 13px; font-weight: 700; font-family: 'DM Mono', monospace; color: var(--accent); }
-  .bar-track { background: var(--bg); border-radius: 4px; height: 5px; overflow: hidden; }
-  .bar-fill { height: 5px; border-radius: 4px; }
-  .country-meta { display: flex; justify-content: space-between; margin-top: 8px; font-size: 10px; color: var(--text-muted); font-family: 'DM Mono', monospace; }
-  .info-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; font-size: 12px; color: var(--text-secondary); line-height: 1.8; }
-  .info-box strong { color: var(--text-primary); font-weight: 700; }
+  .country-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .country-pct { font-size: 14px; font-weight: 700; font-family: 'DM Mono', monospace; color: var(--accent); }
+  .bar-track { background: var(--surface2); border-radius: 4px; height: 4px; overflow: hidden; }
+  .bar-fill { height: 4px; border-radius: 4px; }
+  .country-meta { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; color: var(--text-muted); font-family: 'DM Mono', monospace; }
+  .info-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+  .info-box strong { color: var(--text-primary); font-weight: 600; }
 
   /* Tabs */
-  .tab-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .tabs { display: flex; gap: 6px; }
-  .tab { padding: 7px 16px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--text-secondary); transition: all 0.15s; font-family: 'Noto Sans KR', sans-serif; }
-  .tab:hover { border-color: var(--text-primary); color: var(--text-primary); }
-  .tab.active { background: var(--text-primary); color: #fff; border-color: var(--text-primary); }
+  .tab-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tab {
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    font-family: 'Pretendard', sans-serif;
+  }
+  .tab:hover { border-color: var(--border2); color: var(--text-primary); }
+  .tab.active { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
   .tab-content { display: none; }
   .tab-content.active { display: block; }
-  .kw-count { font-size: 11px; color: var(--text-muted); font-family: 'DM Mono', monospace; }
 
   /* Search */
   .search-wrap { position: relative; }
-  .search-input { width: 200px; padding: 6px 10px 6px 28px; font-size: 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text-primary); font-family: 'Noto Sans KR', sans-serif; outline: none; }
+  .search-input {
+    width: 200px;
+    padding: 7px 10px 7px 30px;
+    font-size: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text-primary);
+    font-family: 'Pretendard', sans-serif;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-input::placeholder { color: var(--text-muted); }
   .search-input:focus { border-color: var(--accent); }
-  .search-icon { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--text-muted); }
+  .search-icon { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--text-muted); pointer-events: none; }
 
   /* Table */
-  .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-  .table-scroll { max-height: 480px; overflow-y: auto; }
+  .table-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
   table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  thead th { position: sticky; top: 0; background: var(--bg); padding: 10px 14px; text-align: left; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; z-index: 1; }
-  tbody td { padding: 9px 14px; border-bottom: 1px solid var(--border); color: var(--text-primary); vertical-align: middle; }
+  thead th {
+    background: var(--surface2);
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-primary);
+    vertical-align: middle;
+  }
   tbody tr:last-child td { border-bottom: none; }
-  tbody tr:hover td { background: var(--bg); }
-  tr.hidden { display: none; }
+  tbody tr:hover td { background: var(--surface2); }
+  tbody tr.hidden { display: none; }
 
-  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; font-family: 'DM Mono', monospace; }
+  /* Badges */
+  .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; font-family: 'DM Mono', monospace; }
   .badge-top { background: var(--green-light); color: var(--green); }
   .badge-mid { background: var(--accent-light); color: var(--accent); }
-  .badge-low { background: var(--bg); color: var(--text-secondary); border: 1px solid var(--border); }
+  .badge-low { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border); }
 
-  .tag { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 10px; background: var(--bg); color: var(--text-secondary); border: 1px solid var(--border); }
-  .tag-beauty { background: #fdf0f6; color: #9b3068; border-color: #f0c0dc; }
-  .tag-info { background: var(--accent-light); color: var(--accent); border-color: #c4d2f4; }
-  .tag-food { background: #fdf5e6; color: #8a5200; border-color: #f0d8a0; }
-  .tag-travel { background: var(--green-light); color: var(--green); border-color: #b0dcbf; }
-  .tag-shopping { background: #f4edfb; color: #6b3fa0; border-color: #d9c0f0; }
-  .tag-exchange { background: #fff7e6; color: #a05a00; border-color: #ffd9a0; }
-  .tag-kpop { background: #fce8f3; color: #8b1a5c; border-color: #e8a8d0; }
+  /* Tags */
+  .tag { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 10px; font-weight: 500; background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border); }
+  .tag-beauty { background: rgba(232,121,160,0.12); color: var(--pink); border-color: rgba(232,121,160,0.2); }
+  .tag-info { background: var(--accent-light); color: var(--accent); border-color: rgba(79,124,255,0.2); }
+  .tag-food { background: rgba(245,166,35,0.12); color: var(--amber); border-color: rgba(245,166,35,0.2); }
+  .tag-travel { background: var(--green-light); color: var(--green); border-color: rgba(62,207,142,0.2); }
+  .tag-shopping { background: rgba(168,85,247,0.12); color: #b97fff; border-color: rgba(168,85,247,0.2); }
+  .tag-exchange { background: rgba(245,166,35,0.12); color: var(--amber); border-color: rgba(245,166,35,0.2); }
+  .tag-kpop { background: rgba(232,121,160,0.12); color: var(--pink); border-color: rgba(232,121,160,0.2); }
 
   .vol { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); }
   .num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); }
-  .table-note { font-size: 11px; color: var(--text-secondary); padding: 12px 14px; background: var(--bg); border-top: 1px solid var(--border); line-height: 1.7; }
-  .table-note strong { color: var(--text-primary); font-weight: 700; }
 
+  .table-note {
+    font-size: 11px;
+    color: var(--text-secondary);
+    padding: 12px 16px;
+    background: var(--surface2);
+    border-top: 1px solid var(--border);
+    line-height: 1.7;
+  }
+  .table-note strong { color: var(--text-primary); font-weight: 600; }
+
+  /* Mobile */
   @media (max-width: 640px) {
+    .header-inner { flex-direction: column; align-items: flex-start; }
+    .header-meta { text-align: left; }
+    .summary-grid { grid-template-columns: 1fr; }
     .metric-grid { grid-template-columns: repeat(2, 1fr); }
     .country-grid { grid-template-columns: 1fr; }
-    .report-grid { grid-template-columns: 1fr; }
+    table { font-size: 11px; }
+    thead th, tbody td { padding: 8px 10px; }
+    .search-input { width: 150px; }
+    .tab { padding: 6px 12px; font-size: 11px; }
+    /* 모바일에서 테이블 가로 스크롤 */
+    .table-card { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { min-width: 500px; }
   }
 </style>
 </head>
 <body>
-<div class="container">
 
-  <!-- Header -->
-  <div class="header">
-    <div class="header-left">
-      <h1>Creatrip /en/news — SEO 분석 리포트</h1>
-      <p>creatrip.com · Google Search · Worldwide · 2025.04 – 2026.04</p>
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <div class="header-badge">SEO Analysis Report</div>
+      <h1>Creatrip /en/news<br>구글 노출 현황 분석</h1>
     </div>
-    <div class="header-right">
+    <div class="header-meta">
       출처: SE Ranking · inpages.ai · Semrush<br>
+      기간: 2025.04 – 2026.04<br>
       작성: 2026. 04. 16
     </div>
   </div>
+</div>
 
-  <!-- Report Summary -->
-  <div class="report-summary">
+<div class="container">
+
+  <!-- Summary -->
+  <div class="summary-card">
     <h2>📋 보고서 요약</h2>
-    <div class="report-grid">
-      <div class="report-item">
+    <div class="summary-grid">
+      <div class="summary-item">
         <h3>크리트립이 강한 이유</h3>
-        <p>구글에 <strong>약 5.5만 개 검색어</strong>로 노출되며, 전체 트래픽의 <strong>72%가 구글 자연 검색</strong>에서 유입. 콘텐츠가 곧 영업사원인 구조로, 블로그 글 → 예약 전환까지 하나의 플랫폼 안에서 완결됨. 15개 언어로 전 세계를 동시 공략 중.</p>
+        <p>구글에 <strong>약 5.5만 개 검색어</strong>로 노출되며, 전체 트래픽의 <strong>72%가 구글 자연 검색</strong>에서 유입. 블로그 글 → 예약 전환까지 하나의 플랫폼 안에서 완결. 15개 언어로 전 세계 동시 공략 중.</p>
       </div>
-      <div class="report-item">
+      <div class="summary-item">
         <h3>최근 1년 핵심 변화</h3>
-        <p>2025년 12월부터 트래픽이 <strong>이전 대비 약 4배 급등</strong>. 뷰티·의료 카테고리가 전체 거래의 <strong>51%</strong>를 차지하며 여행 정보 플랫폼에서 K-뷰티·의료 예약 플랫폼으로 무게중심 이동 중. 헤어살롱·피부과·웰니스 콘텐츠 강화 추세.</p>
+        <p>2025년 12월부터 트래픽이 <strong>이전 대비 약 4배 급등</strong>. 뷰티·의료가 전체 거래의 <strong>51%</strong>를 차지하며 K-뷰티·의료 예약 플랫폼으로 무게중심 이동 중.</p>
       </div>
-      <div class="report-item">
+      <div class="summary-item">
         <h3>KBS가 파고들 수 있는 틈</h3>
-        <p>크리트립 URL은 <strong>/en/news/14433 같은 숫자형</strong>으로 구글이 내용 파악 어려움. KBS가 키워드형 URL 구조를 갖추면 기술적 우위 가능. 또한 크리트립은 넓게 다루다 보니 특정 카테고리 깊이가 얕아 <strong>뷰티·의료 전문 콘텐츠</strong>로 이길 여지 있음.</p>
+        <p>URL이 <strong>숫자형(/en/news/14433)</strong>으로 구글이 내용 파악 어려움. KBS가 키워드형 URL 구조를 갖추면 기술적 우위 가능. 뷰티·의료 <strong>전문 콘텐츠</strong>로 깊이 우위 가능.</p>
       </div>
-      <div class="report-item">
+      <div class="summary-item">
         <h3>KBS 공략 키워드 예시</h3>
-        <p><strong>korean head spa</strong> — 크리트립 상위권이나 1위 아님<br>
-        <strong>skin clinic seoul foreigner</strong> — 외국인 피부과, KBS 강점<br>
-        <strong>hair salon seoul booking</strong> — 예약 의도가 명확한 키워드<br>
-        <strong>汗蒸幕 (찜질방)</strong> — 대만에서 크리트립 1위, 경쟁 진입 고려</p>
+        <p><strong>korean head spa</strong> — 상위권이나 1위 아님<br>
+        <strong>skin clinic seoul foreigner</strong> — KBS 강점 영역<br>
+        <strong>hair salon seoul booking</strong> — 예약 의도 명확<br>
+        <strong>汗蒸幕 (찜질방)</strong> — 대만 1위, 경쟁 진입 고려</p>
       </div>
     </div>
   </div>
@@ -172,29 +345,29 @@
   <div class="section">
     <div class="section-label">핵심 수치</div>
     <div class="metric-grid">
-      <div class="metric-card highlight">
-        <div class="label">구글 노출 검색어 수</div>
-        <div class="value">54.7K</div>
-        <div class="sub">전 세계 기준</div>
-        <div class="desc">광고 없이 구글 자연 검색에 크리트립 페이지가 뜨는 검색어 총 수. 많을수록 다양한 키워드에서 노출됨.</div>
+      <div class="metric-card primary">
+        <div class="metric-label">구글 노출 검색어 수</div>
+        <div class="metric-value">54.7K</div>
+        <div class="metric-sub">전 세계 기준</div>
+        <div class="metric-desc">광고 없이 구글 자연 검색에 뜨는 검색어 총 수. 많을수록 다양한 키워드에서 노출됨.</div>
       </div>
       <div class="metric-card">
-        <div class="label">월 평균 유입 클릭 수</div>
-        <div class="value">15.4K</div>
-        <div class="sub">2026년 1~3월 평균</div>
-        <div class="desc">구글 검색 결과에서 실제로 클릭해 들어온 방문자 수. 최근 3개월 평균값 (SE Ranking 추정치).</div>
+        <div class="metric-label">월 평균 유입 클릭 수</div>
+        <div class="metric-value">15.4K</div>
+        <div class="metric-sub">2026년 1~3월 평균</div>
+        <div class="metric-desc">구글 검색 결과에서 실제로 클릭해 들어온 방문자 수. 최근 3개월 평균 (SE Ranking 추정치).</div>
       </div>
       <div class="metric-card">
-        <div class="label">트래픽 광고 환산 가치</div>
-        <div class="value">$248K</div>
-        <div class="sub">월 기준 ≈ 약 3.5억 원</div>
-        <div class="desc">이 트래픽을 구글 광고로 사려면 매달 이 금액이 필요. 콘텐츠 SEO의 실질 경제적 가치 지표.</div>
+        <div class="metric-label">트래픽 광고 환산 가치</div>
+        <div class="metric-value">$248K</div>
+        <div class="metric-sub">월 기준 ≈ 약 3.5억 원</div>
+        <div class="metric-desc">이 트래픽을 구글 광고로 사려면 매달 이 금액이 필요. 콘텐츠 SEO의 실질 경제적 가치 지표.</div>
       </div>
       <div class="metric-card">
-        <div class="label">외부 링크 출처 도메인</div>
-        <div class="value">8.1K</div>
-        <div class="sub">참조 도메인 수</div>
-        <div class="desc">외부 사이트 8,100곳에서 크리트립으로 링크를 걸고 있음. 구글 신뢰도 지표로 활용.</div>
+        <div class="metric-label">외부 링크 출처 도메인</div>
+        <div class="metric-value">8.1K</div>
+        <div class="metric-sub">참조 도메인 수</div>
+        <div class="metric-desc">외부 사이트 8,100곳에서 크리트립으로 링크를 걸고 있음. 구글 신뢰도 지표로 활용.</div>
       </div>
     </div>
   </div>
@@ -208,18 +381,16 @@
           <div class="chart-title">Monthly Organic Clicks (2025.04 – 2026.04)</div>
           <div class="chart-sub">구글 검색을 통해 실제 유입된 월별 클릭 수 · SE Ranking 추정치</div>
         </div>
-        <div class="chart-badge">2026.04는<br>집계 중</div>
+        <div class="chart-badge">2026.04 집계 중</div>
       </div>
       <div class="chart-wrap">
-        <canvas id="trafficChart" role="img" aria-label="크리트립 월별 구글 유입 추이">차트</canvas>
+        <canvas id="trafficChart" role="img" aria-label="크리트립 월별 유입 추이 차트"></canvas>
+      </div>
+      <div class="callout">
+        <strong>2025년 12월 급등 포인트</strong> — 이전 월 4천~6천 수준에서 12월 약 8천, 2026년 1~3월 15,000+으로 급증. 이 구간에 크리트립이 어떤 콘텐츠를 강화했는지 역추적하면 KBS 콘텐츠 전략 수립에 참고가 됨.
       </div>
     </div>
-    <div class="callout">
-      <strong>2025년 12월 급등 포인트</strong> — 이전까지 월 4천~6천 수준이던 트래픽이 12월부터 약 8천, 2026년 1~3월에는 15,000+으로 급등. 이 구간에 크리트립이 어떤 콘텐츠를 강화했는지 역추적하면 KBS 콘텐츠 전략 수립에 참고가 됨.
-    </div>
   </div>
-
-  <hr class="divider">
 
   <!-- Country -->
   <div class="section">
@@ -227,33 +398,33 @@
     <div class="country-grid">
       <div class="country-card">
         <div class="country-header"><span class="country-name">🇰🇷 한국</span><span class="country-pct">17.7%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:100%; background:#2952cc;"></div></div>
-        <div class="country-meta"><span>유입 클릭 21,600</span><span>노출 키워드 12,600개</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%; background:#4f7cff;"></div></div>
+        <div class="country-meta"><span>유입 21,600</span><span>키워드 12,600개</span></div>
       </div>
       <div class="country-card">
         <div class="country-header"><span class="country-name">🇯🇵 일본</span><span class="country-pct">14.1%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:79%; background:#4a78d4;"></div></div>
-        <div class="country-meta"><span>유입 클릭 17,200</span><span>노출 키워드 13,400개</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:79%; background:#6b96ff;"></div></div>
+        <div class="country-meta"><span>유입 17,200</span><span>키워드 13,400개</span></div>
       </div>
       <div class="country-card">
         <div class="country-header"><span class="country-name">🇹🇼 대만</span><span class="country-pct">13.5%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:76%; background:#6a9ce0;"></div></div>
-        <div class="country-meta"><span>유입 클릭 16,500</span><span>노출 키워드 10,900개</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:76%; background:#89b0ff;"></div></div>
+        <div class="country-meta"><span>유입 16,500</span><span>키워드 10,900개</span></div>
       </div>
       <div class="country-card">
         <div class="country-header"><span class="country-name">🇹🇭 태국</span><span class="country-pct">8.1%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:45%; background:#95bde8;"></div></div>
-        <div class="country-meta"><span>유입 클릭 9,800</span><span>노출 키워드 24,000개</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:45%; background:#3ecf8e;"></div></div>
+        <div class="country-meta"><span>유입 9,800</span><span>키워드 24,000개</span></div>
       </div>
       <div class="country-card">
         <div class="country-header"><span class="country-name">🇭🇰 홍콩</span><span class="country-pct">7.0%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:39%; background:#bdd5f0;"></div></div>
-        <div class="country-meta"><span>유입 클릭 8,500</span><span>노출 키워드 9,700개</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:39%; background:#5acba0;"></div></div>
+        <div class="country-meta"><span>유입 8,500</span><span>키워드 9,700개</span></div>
       </div>
       <div class="country-card">
         <div class="country-header"><span class="country-name">🌐 기타</span><span class="country-pct">39.7%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:100%; background:#c8c6be;"></div></div>
-        <div class="country-meta"><span>유입 클릭 48,400</span><span>노출 키워드 291,500개</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%; background:#3a3a3a;"></div></div>
+        <div class="country-meta"><span>유입 48,400</span><span>키워드 291,500개</span></div>
       </div>
     </div>
     <div class="info-box">
@@ -262,17 +433,15 @@
     </div>
   </div>
 
-  <hr class="divider">
-
   <!-- Keywords -->
   <div class="section">
-    <div class="section-label">국가별 상위 키워드 Top 100 — 해당 국가 구글 검색 노출 순위 기준</div>
+    <div class="section-label">국가별 상위 키워드 Top 100 — 구글 검색 노출 순위 기준</div>
 
     <div class="tab-header">
       <div class="tabs">
-        <button class="tab active" onclick="switchTab('us', this)">🇺🇸 미국 <span style="font-size:10px;opacity:0.7;">72,639개 중</span></button>
-        <button class="tab" onclick="switchTab('jp', this)">🇯🇵 일본 <span style="font-size:10px;opacity:0.7;">18,036개 중</span></button>
-        <button class="tab" onclick="switchTab('tw', this)">🇹🇼 대만 <span style="font-size:10px;opacity:0.7;">15,322개 중</span></button>
+        <button class="tab active" onclick="switchTab('us',this)">🇺🇸 미국 <span style="opacity:.6;font-size:10px;">72K개 중</span></button>
+        <button class="tab" onclick="switchTab('jp',this)">🇯🇵 일본 <span style="opacity:.6;font-size:10px;">18K개 중</span></button>
+        <button class="tab" onclick="switchTab('tw',this)">🇹🇼 대만 <span style="opacity:.6;font-size:10px;">15K개 중</span></button>
       </div>
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
@@ -283,116 +452,114 @@
     <!-- US -->
     <div id="tab-us" class="tab-content active">
       <div class="table-card">
-        <div class="table-scroll">
-          <table id="table-us">
-            <thead><tr><th>#</th><th>검색어</th><th>월 검색량</th><th>구글 노출 순위</th><th>성격</th></tr></thead>
-            <tbody>
-              <tr><td class="num">1</td><td>what time is it in seoul korea</td><td class="vol">33,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">2</td><td>knotted</td><td class="vol">74,000</td><td><span class="badge badge-low">28위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">3</td><td>korean grocery store near me</td><td class="vol">27,100</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">4</td><td>what time is it in south korea right now</td><td class="vol">8,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">5</td><td>korean hairstyles</td><td class="vol">5,400</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">6</td><td>korean surnames</td><td class="vol">27,800</td><td><span class="badge badge-mid">11위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">7</td><td>ajumma</td><td class="vol">18,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">8</td><td>banchan</td><td class="vol">27,100</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">9</td><td>namdaemun market</td><td class="vol">22,400</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">10</td><td>incheon airport</td><td class="vol">8,100</td><td><span class="badge badge-low">20위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">11</td><td>what time in korea</td><td class="vol">3,600</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">12</td><td>soondae</td><td class="vol">6,600</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">13</td><td>seoul korea time</td><td class="vol">5,400</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">14</td><td>bad word in korean</td><td class="vol">8,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">15</td><td>icn airport</td><td class="vol">27,100</td><td><span class="badge badge-low">24위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">16</td><td>asian last names</td><td class="vol">5,700</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">17</td><td>korean convenience store</td><td class="vol">6,600</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">18</td><td>itaewon</td><td class="vol">6,600</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">19</td><td>korean birth flower</td><td class="vol">480</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">20</td><td>korean perm men</td><td class="vol">4,400</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">21</td><td>korean surname</td><td class="vol">4,400</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">22</td><td>seoul airport</td><td class="vol">5,700</td><td><span class="badge badge-low">28위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">23</td><td>gimpo airport</td><td class="vol">2,400</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">24</td><td>korean hair</td><td class="vol">6,600</td><td><span class="badge badge-low">22위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">25</td><td>korean haircut</td><td class="vol">10,800</td><td><span class="badge badge-mid">14위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">26</td><td>korean urban legends</td><td class="vol">590</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">27</td><td>korean haircuts</td><td class="vol">1,000</td><td><span class="badge badge-mid">7위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">28</td><td>korean webtoon</td><td class="vol">2,400</td><td><span class="badge badge-low">30위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">29</td><td>korean last names</td><td class="vol">1,600</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">30</td><td>incheon airport food</td><td class="vol">390</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">31</td><td>hometown cha cha cha location</td><td class="vol">140</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
-              <tr><td class="num">32</td><td>coex mall</td><td class="vol">1,900</td><td><span class="badge badge-low">25위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">33</td><td>hair korean</td><td class="vol">2,400</td><td><span class="badge badge-mid">9위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">34</td><td>korean zombie movie</td><td class="vol">3,600</td><td><span class="badge badge-low">26위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">35</td><td>how to be korean idol</td><td class="vol">390</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
-              <tr><td class="num">36</td><td>kakaotalk characters</td><td class="vol">320</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">37</td><td>sinsa</td><td class="vol">3,200</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">38</td><td>popular korean haircuts</td><td class="vol">320</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">39</td><td>korean drama food</td><td class="vol">390</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">40</td><td>juno hair</td><td class="vol">1,100</td><td><span class="badge badge-low">21위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">41</td><td>fortune telling in korea</td><td class="vol">210</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">42</td><td>korean short hairstyle men</td><td class="vol">260</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">43</td><td>korean flight schedule</td><td class="vol">590</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">44</td><td>daechang</td><td class="vol">2,400</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">45</td><td>korea cities</td><td class="vol">1,900</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">46</td><td>incheon airport terminal 2</td><td class="vol">590</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">47</td><td>long korean hairstyles</td><td class="vol">320</td><td><span class="badge badge-mid">8위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">48</td><td>korean style long hair</td><td class="vol">320</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">49</td><td>korean passport</td><td class="vol">1,900</td><td><span class="badge badge-low">19위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">50</td><td>food incheon airport</td><td class="vol">390</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">51</td><td>bts kpop profile</td><td class="vol">590</td><td><span class="badge badge-low">20위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
-              <tr><td class="num">52</td><td>incheon international airport terminal 2</td><td class="vol">590</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">53</td><td>korean high school uniform</td><td class="vol">480</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">54</td><td>mom's touch</td><td class="vol">1,100</td><td><span class="badge badge-low">20위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">55</td><td>saekki</td><td class="vol">390</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">56</td><td>unique korean last names</td><td class="vol">260</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">57</td><td>answer me 1988 korean drama</td><td class="vol">590</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
-              <tr><td class="num">58</td><td>kakao characters</td><td class="vol">210</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">59</td><td>cute korean characters</td><td class="vol">260</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">60</td><td>shiba in korean</td><td class="vol">590</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">61</td><td>korean birth day flower</td><td class="vol">480</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">62</td><td>korea birthday flower</td><td class="vol">480</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">63</td><td>korean birthday flower</td><td class="vol">480</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">64</td><td>korean birth flower by date</td><td class="vol">140</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">65</td><td>korean name generator</td><td class="vol">1,500</td><td><span class="badge badge-low">22위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">66</td><td>10 day forecast seoul korea</td><td class="vol">480</td><td><span class="badge badge-mid">13위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">67</td><td>korean hair style woman</td><td class="vol">260</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">68</td><td>yeongjong island</td><td class="vol">260</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">69</td><td>time and weather in seoul korea</td><td class="vol">590</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">70</td><td>mr queen korea drama</td><td class="vol">590</td><td><span class="badge badge-low">26위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
-              <tr><td class="num">71</td><td>incheon airport restaurant</td><td class="vol">390</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">72</td><td>taxi korean drama</td><td class="vol">590</td><td><span class="badge badge-low">29위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
-              <tr><td class="num">73</td><td>what time is it in seoul south korea</td><td class="vol">1,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">74</td><td>korean bj legend</td><td class="vol">590</td><td><span class="badge badge-mid">10위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">75</td><td>m playground</td><td class="vol">590</td><td><span class="badge badge-mid">7위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">76</td><td>korean male</td><td class="vol">880</td><td><span class="badge badge-low">19위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">77</td><td>seoul icn</td><td class="vol">4,400</td><td><span class="badge badge-low">26위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">78</td><td>lee hyori tattoos</td><td class="vol">50</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
-              <tr><td class="num">79</td><td>korea drama ost</td><td class="vol">590</td><td><span class="badge badge-low">23위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
-              <tr><td class="num">80</td><td>what time is in south korea</td><td class="vol">2,400</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">81</td><td>korean birth flowers</td><td class="vol">480</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">82</td><td>incheon international airport</td><td class="vol">6,600</td><td><span class="badge badge-low">22위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">83</td><td>10 day weather seoul korea</td><td class="vol">480</td><td><span class="badge badge-low">21위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">84</td><td>korean drama food</td><td class="vol">390</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">85</td><td>mrs queen</td><td class="vol">540</td><td><span class="badge badge-low">30위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
-              <tr><td class="num">86</td><td>cute korean characters</td><td class="vol">260</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">87</td><td>what time is it in seoul korea (var)</td><td class="vol">1,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">88</td><td>korean zombie movie</td><td class="vol">3,600</td><td><span class="badge badge-low">26위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">89</td><td>gimpo airport (var)</td><td class="vol">2,400</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">90</td><td>korean high school</td><td class="vol">480</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">91</td><td>kakaotalk characters (var)</td><td class="vol">210</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">92</td><td>korean cute characters</td><td class="vol">260</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">93</td><td>korean surname (var)</td><td class="vol">4,400</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">94</td><td>create trip</td><td class="vol">110</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">브랜드</span></td></tr>
-              <tr><td class="num">95</td><td>aterrizaje</td><td class="vol">1,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">96</td><td>sinsa (area)</td><td class="vol">3,200</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">97</td><td>korean hairstyles (var2)</td><td class="vol">5,400</td><td><span class="badge badge-low">21위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">98</td><td>bad word in korean (var)</td><td class="vol">8,100</td><td><span class="badge badge-low">20위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">99</td><td>korean haircuts (var)</td><td class="vol">1,000</td><td><span class="badge badge-mid">16위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">100</td><td>popular korean haircuts (var)</td><td class="vol">320</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-            </tbody>
-          </table>
-        </div>
+        <table>
+          <thead><tr><th>#</th><th>검색어</th><th>월 검색량</th><th>노출 순위</th><th>성격</th></tr></thead>
+          <tbody>
+            <tr><td class="num">1</td><td>what time is it in seoul korea</td><td class="vol">33,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">2</td><td>knotted</td><td class="vol">74,000</td><td><span class="badge badge-low">28위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">3</td><td>korean grocery store near me</td><td class="vol">27,100</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">4</td><td>what time is it in south korea right now</td><td class="vol">8,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">5</td><td>korean hairstyles</td><td class="vol">5,400</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">6</td><td>korean surnames</td><td class="vol">27,800</td><td><span class="badge badge-mid">11위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">7</td><td>ajumma</td><td class="vol">18,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">8</td><td>banchan</td><td class="vol">27,100</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">9</td><td>namdaemun market</td><td class="vol">22,400</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">10</td><td>incheon airport</td><td class="vol">8,100</td><td><span class="badge badge-low">20위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">11</td><td>what time in korea</td><td class="vol">3,600</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">12</td><td>soondae</td><td class="vol">6,600</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">13</td><td>seoul korea time</td><td class="vol">5,400</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">14</td><td>bad word in korean</td><td class="vol">8,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">15</td><td>icn airport</td><td class="vol">27,100</td><td><span class="badge badge-low">24위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">16</td><td>asian last names</td><td class="vol">5,700</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">17</td><td>korean convenience store</td><td class="vol">6,600</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">18</td><td>itaewon</td><td class="vol">6,600</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">19</td><td>korean birth flower</td><td class="vol">480</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">20</td><td>korean perm men</td><td class="vol">4,400</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">21</td><td>korean surname</td><td class="vol">4,400</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">22</td><td>seoul airport</td><td class="vol">5,700</td><td><span class="badge badge-low">28위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">23</td><td>gimpo airport</td><td class="vol">2,400</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">24</td><td>korean hair</td><td class="vol">6,600</td><td><span class="badge badge-low">22위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">25</td><td>korean haircut</td><td class="vol">10,800</td><td><span class="badge badge-mid">14위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">26</td><td>korean urban legends</td><td class="vol">590</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">27</td><td>korean haircuts</td><td class="vol">1,000</td><td><span class="badge badge-mid">7위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">28</td><td>korean webtoon</td><td class="vol">2,400</td><td><span class="badge badge-low">30위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">29</td><td>korean last names</td><td class="vol">1,600</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">30</td><td>incheon airport food</td><td class="vol">390</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">31</td><td>hometown cha cha cha location</td><td class="vol">140</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
+            <tr><td class="num">32</td><td>coex mall</td><td class="vol">1,900</td><td><span class="badge badge-low">25위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">33</td><td>hair korean</td><td class="vol">2,400</td><td><span class="badge badge-mid">9위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">34</td><td>korean zombie movie</td><td class="vol">3,600</td><td><span class="badge badge-low">26위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">35</td><td>how to be korean idol</td><td class="vol">390</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
+            <tr><td class="num">36</td><td>kakaotalk characters</td><td class="vol">320</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">37</td><td>sinsa</td><td class="vol">3,200</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">38</td><td>popular korean haircuts</td><td class="vol">320</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">39</td><td>korean drama food</td><td class="vol">390</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">40</td><td>juno hair</td><td class="vol">1,100</td><td><span class="badge badge-low">21위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">41</td><td>fortune telling in korea</td><td class="vol">210</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">42</td><td>korean short hairstyle men</td><td class="vol">260</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">43</td><td>korean flight schedule</td><td class="vol">590</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">44</td><td>daechang</td><td class="vol">2,400</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">45</td><td>korea cities</td><td class="vol">1,900</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">46</td><td>incheon airport terminal 2</td><td class="vol">590</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">47</td><td>long korean hairstyles</td><td class="vol">320</td><td><span class="badge badge-mid">8위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">48</td><td>korean style long hair</td><td class="vol">320</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">49</td><td>korean passport</td><td class="vol">1,900</td><td><span class="badge badge-low">19위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">50</td><td>food incheon airport</td><td class="vol">390</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">51</td><td>bts kpop profile</td><td class="vol">590</td><td><span class="badge badge-low">20위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
+            <tr><td class="num">52</td><td>incheon international airport terminal 2</td><td class="vol">590</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">53</td><td>korean high school uniform</td><td class="vol">480</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">54</td><td>mom's touch</td><td class="vol">1,100</td><td><span class="badge badge-low">20위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">55</td><td>saekki</td><td class="vol">390</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">56</td><td>unique korean last names</td><td class="vol">260</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">57</td><td>answer me 1988 korean drama</td><td class="vol">590</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
+            <tr><td class="num">58</td><td>kakao characters</td><td class="vol">210</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">59</td><td>cute korean characters</td><td class="vol">260</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">60</td><td>shiba in korean</td><td class="vol">590</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">61</td><td>korean birth day flower</td><td class="vol">480</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">62</td><td>korea birthday flower</td><td class="vol">480</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">63</td><td>korean birthday flower</td><td class="vol">480</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">64</td><td>korean birth flower by date</td><td class="vol">140</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">65</td><td>korean name generator</td><td class="vol">1,500</td><td><span class="badge badge-low">22위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">66</td><td>10 day forecast seoul korea</td><td class="vol">480</td><td><span class="badge badge-mid">13위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">67</td><td>korean hair style woman</td><td class="vol">260</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">68</td><td>yeongjong island</td><td class="vol">260</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">69</td><td>time and weather in seoul korea</td><td class="vol">590</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">70</td><td>mr queen korea drama</td><td class="vol">590</td><td><span class="badge badge-low">26위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
+            <tr><td class="num">71</td><td>incheon airport restaurant</td><td class="vol">390</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">72</td><td>taxi korean drama</td><td class="vol">590</td><td><span class="badge badge-low">29위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
+            <tr><td class="num">73</td><td>what time is it in seoul south korea</td><td class="vol">1,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">74</td><td>korean bj legend</td><td class="vol">590</td><td><span class="badge badge-mid">10위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">75</td><td>m playground</td><td class="vol">590</td><td><span class="badge badge-mid">7위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">76</td><td>korean male</td><td class="vol">880</td><td><span class="badge badge-low">19위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">77</td><td>seoul icn</td><td class="vol">4,400</td><td><span class="badge badge-low">26위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">78</td><td>lee hyori tattoos</td><td class="vol">50</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
+            <tr><td class="num">79</td><td>korea drama ost</td><td class="vol">590</td><td><span class="badge badge-low">23위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
+            <tr><td class="num">80</td><td>what time is in south korea</td><td class="vol">2,400</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">81</td><td>korean birth flowers</td><td class="vol">480</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">82</td><td>incheon international airport</td><td class="vol">6,600</td><td><span class="badge badge-low">22위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">83</td><td>10 day weather seoul korea</td><td class="vol">480</td><td><span class="badge badge-low">21위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">84</td><td>mrs queen</td><td class="vol">540</td><td><span class="badge badge-low">30위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
+            <tr><td class="num">85</td><td>gimpo airport (2nd url)</td><td class="vol">2,400</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">86</td><td>aterrizaje</td><td class="vol">1,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">87</td><td>korean high school</td><td class="vol">480</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">88</td><td>create trip</td><td class="vol">110</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">브랜드</span></td></tr>
+            <tr><td class="num">89</td><td>korean hairstyles (2nd url)</td><td class="vol">5,400</td><td><span class="badge badge-low">21위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">90</td><td>bad word in korean (2nd url)</td><td class="vol">8,100</td><td><span class="badge badge-low">20위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">91</td><td>korean haircuts (2nd url)</td><td class="vol">1,000</td><td><span class="badge badge-mid">16위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">92</td><td>korean surname (2nd url)</td><td class="vol">4,400</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">93</td><td>korean convenience store (2nd url)</td><td class="vol">6,600</td><td><span class="badge badge-mid">11위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">94</td><td>itaewon (2nd url)</td><td class="vol">6,600</td><td><span class="badge badge-low">30위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">95</td><td>korean birth flower (var)</td><td class="vol">480</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">96</td><td>ajumma (2nd url)</td><td class="vol">18,100</td><td><span class="badge badge-mid">17위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">97</td><td>popular korean haircuts (var)</td><td class="vol">320</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">98</td><td>sinsa (var)</td><td class="vol">3,200</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">99</td><td>korean surname (3rd url)</td><td class="vol">4,400</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">100</td><td>korean drama food (var)</td><td class="vol">390</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+          </tbody>
+        </table>
         <div class="table-note">
-          <strong>읽는 법</strong> — "월 검색량"은 미국에서 해당 검색어가 한 달에 검색되는 횟수. "구글 노출 순위"는 미국 구글에서 이 단어를 검색했을 때 크리트립이 몇 번째로 나오는지.<br>
-          <strong>KBS 기회 포인트</strong> — korean hairstyles(4위), korean haircut(14위), korean hair(22위)는 뷰티 키워드인데 크리트립이 1위가 아님. 검색량도 많아 공략 가능한 구간.
+          <strong>읽는 법</strong> — "월 검색량"은 미국 구글에서 한 달에 검색되는 횟수. "노출 순위"는 미국 구글에서 크리트립이 몇 번째로 나오는지.<br>
+          <strong>KBS 기회 포인트</strong> — korean hairstyles(4위), korean haircut(14위), korean hair(22위)는 뷰티 키워드인데 크리트립이 1위가 아님. 공략 가능 구간.
         </div>
       </div>
     </div>
@@ -400,115 +567,113 @@
     <!-- JP -->
     <div id="tab-jp" class="tab-content">
       <div class="table-card">
-        <div class="table-scroll">
-          <table id="table-jp">
-            <thead><tr><th>#</th><th>검색어</th><th>월 검색량</th><th>구글 노출 순위</th><th>성격</th></tr></thead>
-            <tbody>
-              <tr><td class="num">1</td><td>サーティワン アイスケーキ (배스킨라빈스 아이스케이크)</td><td class="vol">74,000</td><td><span class="badge badge-low">22위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">2</td><td>31 アイス ケーキ</td><td class="vol">60,500</td><td><span class="badge badge-low">24위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">3</td><td>31 アイスケーキ</td><td class="vol">60,500</td><td><span class="badge badge-low">21위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">4</td><td>オリーブ ヤング (올리브영)</td><td class="vol">49,500</td><td><span class="badge badge-low">23위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">5</td><td>オリーブヤング</td><td class="vol">49,500</td><td><span class="badge badge-low">24위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">6</td><td>バスキン ロビンス (배스킨라빈스)</td><td class="vol">40,500</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">7</td><td>バスキン ロビンス</td><td class="vol">40,500</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">8</td><td>韓国 天気 (한국 날씨)</td><td class="vol">33,100</td><td><span class="badge badge-low">20위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">9</td><td>韓国ファッション (한국 패션)</td><td class="vol">22,200</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-beauty">뷰티/패션</span></td></tr>
-              <tr><td class="num">10</td><td>メイク 韓国 (한국 메이크업)</td><td class="vol">18,100</td><td><span class="badge badge-low">26위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">11</td><td>ブルー エレファント (레스토랑)</td><td class="vol">18,100</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">12</td><td>韓国 制服 (한국 교복)</td><td class="vol">12,100</td><td><span class="badge badge-mid">16위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">13</td><td>一重美人 (홑꺼풀 미인)</td><td class="vol">12,100</td><td><span class="badge badge-mid">17위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">14</td><td>キムミンジェ (김민재)</td><td class="vol">12,100</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
-              <tr><td class="num">15</td><td>韓国 カフェ (한국 카페)</td><td class="vol">12,100</td><td><span class="badge badge-low">25위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">16</td><td>弘大 (홍대)</td><td class="vol">12,100</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">17</td><td>韓国 ダイソー (한국 다이소)</td><td class="vol">10,800</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">18</td><td>韓国 ダイソー</td><td class="vol">10,800</td><td><span class="badge badge-mid">3위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">19</td><td>韓国 ダイソー</td><td class="vol">10,800</td><td><span class="badge badge-mid">10위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">20</td><td>韓国語 悪口 (한국어 욕)</td><td class="vol">9,900</td><td><span class="badge badge-mid">15위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">21</td><td>韓国 コンビニ (한국 편의점)</td><td class="vol">9,900</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">22</td><td>韓国 ブランド (한국 브랜드)</td><td class="vol">9,900</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">23</td><td>ロッテ マート (롯데마트)</td><td class="vol">9,900</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">24</td><td>ロッテマート</td><td class="vol">9,900</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">25</td><td>ロッテマート</td><td class="vol">9,900</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">26</td><td>釜山空港 (부산공항)</td><td class="vol">9,900</td><td><span class="badge badge-low">20위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">27</td><td>韓国美人 (한국 미인)</td><td class="vol">9,900</td><td><span class="badge badge-low">23위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">28</td><td>ソウル 天気 10 日間 (서울 날씨 10일)</td><td class="vol">9,900</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">29</td><td>韓国 天気予報</td><td class="vol">6,600</td><td><span class="badge badge-low">21위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">30</td><td>韓国 物価 (한국 물가)</td><td class="vol">6,600</td><td><span class="badge badge-low">26위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">31</td><td>延世 大学 (연세대학교)</td><td class="vol">6,600</td><td><span class="badge badge-mid">15위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">32</td><td>韓国 前髪 (한국 앞머리)</td><td class="vol">6,600</td><td><span class="badge badge-mid">9위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">33</td><td>韓服 (한복)</td><td class="vol">8,000</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">34</td><td>一重 美人</td><td class="vol">8,000</td><td><span class="badge badge-mid">18위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">35</td><td>naver map</td><td class="vol">8,100</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">36</td><td>韓国 地図 (한국 지도)</td><td class="vol">20,100</td><td><span class="badge badge-mid">17위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">37</td><td>韓国 ネイル (한국 네일)</td><td class="vol">4,400</td><td><span class="badge badge-low">23위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">38</td><td>韓国 焼酎 (한국 소주)</td><td class="vol">4,400</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">39</td><td>名前 韓国 (한국 이름)</td><td class="vol">4,400</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">40</td><td>名前 韓国 (2위)</td><td class="vol">4,400</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">41</td><td>ソウル天気10日間 (서울 날씨 10일)</td><td class="vol">4,400</td><td><span class="badge badge-mid">10위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">42</td><td>韓国 名前 ランキング (한국 이름 순위)</td><td class="vol">880</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">43</td><td>済州 島 お 土産 (제주도 기념품)</td><td class="vol">390</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">44</td><td>ヴィンチェンツォ ロケ地 (빈센조 촬영지)</td><td class="vol">390</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
-              <tr><td class="num">45</td><td>ヒュンダイ ソウル フロアマップ (현대서울)</td><td class="vol">590</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">46</td><td>ペントハウス 相関 図 (펜트하우스 관계도)</td><td class="vol">3,100</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
-              <tr><td class="num">47</td><td>椿 の 花 咲く 頃 (동백꽃 필 무렵)</td><td class="vol">5,700</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
-              <tr><td class="num">48</td><td>韓国 あかすり (한국 이태리타올)</td><td class="vol">480</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">49</td><td>韓国 の 銭湯 (한국 목욕탕)</td><td class="vol">590</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">50</td><td>韓国 服装 (한국 옷차림)</td><td class="vol">1,900</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">51</td><td>v ジェニー (V 제니)</td><td class="vol">480</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
-              <tr><td class="num">52</td><td>v ジェニ</td><td class="vol">480</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
-              <tr><td class="num">53</td><td>キング ザ ランド ロケ地 (킹더랜드 촬영지)</td><td class="vol">480</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
-              <tr><td class="num">54</td><td>韓国 男の子 名前 (한국 남자 이름)</td><td class="vol">480</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">55</td><td>naver マップ</td><td class="vol">1,500</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">56</td><td>韓国 苗字 ランキング (한국 성씨 순위)</td><td class="vol">1,100</td><td><span class="badge badge-mid">15위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">57</td><td>韓国 ポーズ (한국 포즈)</td><td class="vol">320</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">58</td><td>curse words in korean</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">59</td><td>korean swear words</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">60</td><td>swear words in korean</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">61</td><td>bad words in korean</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">62</td><td>一重 韓国 (홑꺼풀 한국)</td><td class="vol">590</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">63</td><td>花 韓国 (한국 꽃)</td><td class="vol">1,100</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">64</td><td>韓国 花 (한국 꽃2)</td><td class="vol">1,000</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">65</td><td>東大門 両替 (동대문 환전)</td><td class="vol">480</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">66</td><td>韓国 気温 服装 (한국 기온 옷차림)</td><td class="vol">590</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">67</td><td>ロッテ マート (롯데마트 15위)</td><td class="vol">9,900</td><td><span class="badge badge-mid">15위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">68</td><td>クリエイト リップ (크리트립)</td><td class="vol">320</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">브랜드</span></td></tr>
-              <tr><td class="num">69</td><td>クリエイトリップ</td><td class="vol">320</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">브랜드</span></td></tr>
-              <tr><td class="num">70</td><td>韓国 emart (한국 이마트)</td><td class="vol">590</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">71</td><td>韓国 名前 男 (한국 남자 이름)</td><td class="vol">320</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">72</td><td>韓国 女子 名前 (한국 여자 이름)</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">73</td><td>韓国 名前 意味 (한국 이름 의미)</td><td class="vol">170</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">74</td><td>韓国 女 名前 (한국 여성 이름)</td><td class="vol">170</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">75</td><td>韓国 男性 名前 (한국 남성 이름)</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">76</td><td>ジェニー v 熱愛 写真 (제니 V 열애)</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
-              <tr><td class="num">77</td><td>韓国 av 女優 (검색량 많음)</td><td class="vol">3,200</td><td><span class="badge badge-mid">9위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">78</td><td>arex (인천공항 직통열차)</td><td class="vol">8,000</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">79</td><td>仁川 空港 arex 乗り場 (인천공항 AREX)</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">80</td><td>naver map 日本 語 (일본어)</td><td class="vol">590</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">81</td><td>カフェ 韓国 (카페 한국)</td><td class="vol">5,700</td><td><span class="badge badge-low">20위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">82</td><td>ソウル 天気 10日間</td><td class="vol">920</td><td><span class="badge badge-mid">9위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">83</td><td>韓国 焼肉 名前 (한국 고기 이름)</td><td class="vol">480</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">84</td><td>ヒュンダイ ソウル フロア マップ</td><td class="vol">590</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">85</td><td>韓国 ほくろ 除去 (점 제거)</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">86</td><td>韓国 アイス (한국 아이스크림)</td><td class="vol">2,400</td><td><span class="badge badge-mid">18위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">87</td><td>gdragon ジェニー</td><td class="vol">480</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
-              <tr><td class="num">88</td><td>bad words korean</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">89</td><td>curse words korean</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">90</td><td>korean bad word</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">91</td><td>korean swear word</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">92</td><td>韓国 コンビニ (편의점, 1위)</td><td class="vol">9,900</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">93</td><td>韓国 コンビニ (편의점, 11위)</td><td class="vol">9,900</td><td><span class="badge badge-mid">11위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">94</td><td>ロッテマート (6위)</td><td class="vol">9,900</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">95</td><td>ロッテマート (15위)</td><td class="vol">9,900</td><td><span class="badge badge-mid">15위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">96</td><td>韓国 苗字 ランキング</td><td class="vol">1,100</td><td><span class="badge badge-mid">15위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">97</td><td>椿の花咲く頃 (동백꽃, 1위)</td><td class="vol">5,700</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
-              <tr><td class="num">98</td><td>ジェニー v 熱愛写真</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
-              <tr><td class="num">99</td><td>韓国 ポーズ (포즈)</td><td class="vol">320</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">100</td><td>ロッテ マート (2위)</td><td class="vol">9,900</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-            </tbody>
-          </table>
-        </div>
+        <table>
+          <thead><tr><th>#</th><th>검색어</th><th>월 검색량</th><th>노출 순위</th><th>성격</th></tr></thead>
+          <tbody>
+            <tr><td class="num">1</td><td>サーティワン アイスケーキ (배스킨라빈스)</td><td class="vol">74,000</td><td><span class="badge badge-low">22위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">2</td><td>31 アイス ケーキ</td><td class="vol">60,500</td><td><span class="badge badge-low">24위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">3</td><td>31 アイスケーキ</td><td class="vol">60,500</td><td><span class="badge badge-low">21위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">4</td><td>オリーブ ヤング (올리브영)</td><td class="vol">49,500</td><td><span class="badge badge-low">23위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">5</td><td>オリーブヤング</td><td class="vol">49,500</td><td><span class="badge badge-low">24위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">6</td><td>バスキン ロビンス (배스킨라빈스)</td><td class="vol">40,500</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">7</td><td>バスキン ロビンス (2nd)</td><td class="vol">40,500</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">8</td><td>韓国 天気 (한국 날씨)</td><td class="vol">33,100</td><td><span class="badge badge-low">20위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">9</td><td>韓国ファッション (한국 패션)</td><td class="vol">22,200</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">10</td><td>メイク 韓国 (한국 메이크업)</td><td class="vol">18,100</td><td><span class="badge badge-low">26위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">11</td><td>ブルー エレファント</td><td class="vol">18,100</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">12</td><td>韓国 制服 (교복)</td><td class="vol">12,100</td><td><span class="badge badge-mid">16위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">13</td><td>一重美人 (홑꺼풀 미인)</td><td class="vol">12,100</td><td><span class="badge badge-mid">17위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">14</td><td>キムミンジェ (김민재)</td><td class="vol">12,100</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
+            <tr><td class="num">15</td><td>韓国 カフェ (카페)</td><td class="vol">12,100</td><td><span class="badge badge-low">25위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">16</td><td>弘大 (홍대)</td><td class="vol">12,100</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">17</td><td>韓国 ダイソー (다이소)</td><td class="vol">10,800</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">18</td><td>韓国 ダイソー (3위)</td><td class="vol">10,800</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">19</td><td>韓国 ダイソー (10위)</td><td class="vol">10,800</td><td><span class="badge badge-mid">10위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">20</td><td>韓国語 悪口 (한국어 욕)</td><td class="vol">9,900</td><td><span class="badge badge-mid">15위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">21</td><td>韓国 コンビニ (편의점) 1위</td><td class="vol">9,900</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">22</td><td>韓国 コンビニ 11위</td><td class="vol">9,900</td><td><span class="badge badge-mid">11위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">23</td><td>韓国 ブランド (브랜드)</td><td class="vol">9,900</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">24</td><td>ロッテ マート (롯데마트) 2위</td><td class="vol">9,900</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">25</td><td>ロッテマート 1위</td><td class="vol">9,900</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">26</td><td>ロッテマート 6위</td><td class="vol">9,900</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">27</td><td>ロッテマート 15위</td><td class="vol">9,900</td><td><span class="badge badge-mid">15위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">28</td><td>釜山空港 (부산공항)</td><td class="vol">9,900</td><td><span class="badge badge-low">20위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">29</td><td>韓国美人 (한국 미인)</td><td class="vol">9,900</td><td><span class="badge badge-low">23위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">30</td><td>ソウル 天気 10 日間 (서울 날씨 10일)</td><td class="vol">9,900</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">31</td><td>韓服 (한복)</td><td class="vol">8,000</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">32</td><td>一重 美人</td><td class="vol">8,000</td><td><span class="badge badge-mid">18위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">33</td><td>naver map</td><td class="vol">8,100</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">34</td><td>arex (인천공항 직통열차)</td><td class="vol">8,000</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">35</td><td>韓国 地図 (지도)</td><td class="vol">20,100</td><td><span class="badge badge-mid">17위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">36</td><td>韓国 前髪 (앞머리)</td><td class="vol">6,600</td><td><span class="badge badge-mid">9위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">37</td><td>韓国 天気予報</td><td class="vol">6,600</td><td><span class="badge badge-low">21위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">38</td><td>韓国 物価 (물가)</td><td class="vol">6,600</td><td><span class="badge badge-low">26위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">39</td><td>延世 大学 (연세대)</td><td class="vol">6,600</td><td><span class="badge badge-mid">15위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">40</td><td>椿 の 花 咲く 頃 (동백꽃 필 무렵)</td><td class="vol">5,700</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
+            <tr><td class="num">41</td><td>カフェ 韓国</td><td class="vol">5,700</td><td><span class="badge badge-low">20위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">42</td><td>韓国 焼酎 (소주)</td><td class="vol">4,400</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">43</td><td>韓国 ネイル (네일)</td><td class="vol">4,400</td><td><span class="badge badge-low">23위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">44</td><td>名前 韓国 (한국 이름) 1위</td><td class="vol">4,400</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">45</td><td>名前 韓国 2위</td><td class="vol">4,400</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">46</td><td>ソウル天気10日間</td><td class="vol">4,400</td><td><span class="badge badge-mid">10위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">47</td><td>ペントハウス 相関 図 (펜트하우스)</td><td class="vol">3,100</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
+            <tr><td class="num">48</td><td>韓国 av 女優</td><td class="vol">3,200</td><td><span class="badge badge-mid">9위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">49</td><td>naver マップ</td><td class="vol">1,500</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">50</td><td>韓国 苗字 ランキング (성씨 순위)</td><td class="vol">1,100</td><td><span class="badge badge-mid">15위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">51</td><td>韓国 名前 ランキング</td><td class="vol">880</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">52</td><td>済州 島 お 土産 (제주도 기념품)</td><td class="vol">390</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">53</td><td>ヴィンチェンツォ ロケ地 (빈센조)</td><td class="vol">390</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
+            <tr><td class="num">54</td><td>ヒュンダイ ソウル フロアマップ</td><td class="vol">590</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">55</td><td>韓国 あかすり (이태리타올)</td><td class="vol">480</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">56</td><td>韓国 の 銭湯 (목욕탕)</td><td class="vol">590</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">57</td><td>韓国 服装 (옷차림)</td><td class="vol">1,900</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">58</td><td>v ジェニー (V 제니)</td><td class="vol">480</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
+            <tr><td class="num">59</td><td>v ジェニ</td><td class="vol">480</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
+            <tr><td class="num">60</td><td>キング ザ ランド ロケ地 (킹더랜드)</td><td class="vol">480</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
+            <tr><td class="num">61</td><td>韓国 男の子 名前</td><td class="vol">480</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">62</td><td>ソウル 天気 10日間 (9위)</td><td class="vol">920</td><td><span class="badge badge-mid">9위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">63</td><td>一重 韓国</td><td class="vol">590</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">64</td><td>花 韓国</td><td class="vol">1,100</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">65</td><td>東大門 両替 (동대문 환전)</td><td class="vol">480</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">66</td><td>韓国 気温 服装</td><td class="vol">590</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">67</td><td>韓国 焼肉 名前 (고기 이름)</td><td class="vol">480</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">68</td><td>curse words in korean</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">69</td><td>korean swear words</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">70</td><td>bad words in korean</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">71</td><td>korean bad word</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">72</td><td>bad words korean</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">73</td><td>curse words korean</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">74</td><td>korean swear word</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">75</td><td>韓国 ポーズ (포즈)</td><td class="vol">320</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">76</td><td>韓国 ほくろ 除去 (점 제거)</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">77</td><td>韓国 女子 名前</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">78</td><td>韓国 名前 意味</td><td class="vol">170</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">79</td><td>韓国 女 名前</td><td class="vol">170</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">80</td><td>韓国 男性 名前</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">81</td><td>ジェニー v 熱愛 写真</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
+            <tr><td class="num">82</td><td>gdragon ジェニー</td><td class="vol">480</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
+            <tr><td class="num">83</td><td>クリエイト リップ (크리트립)</td><td class="vol">320</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">브랜드</span></td></tr>
+            <tr><td class="num">84</td><td>クリエイトリップ</td><td class="vol">320</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">브랜드</span></td></tr>
+            <tr><td class="num">85</td><td>韓国 emart (이마트)</td><td class="vol">590</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">86</td><td>韓国 名前 男</td><td class="vol">320</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">87</td><td>韓国 アイス (아이스크림)</td><td class="vol">2,400</td><td><span class="badge badge-mid">18위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">88</td><td>仁川 空港 arex 乗り場</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">89</td><td>naver map 日本 語</td><td class="vol">590</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">90</td><td>韓国 花</td><td class="vol">1,000</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">91</td><td>ヴィンチェンツォ ロケ地 (2위)</td><td class="vol">390</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
+            <tr><td class="num">92</td><td>韓国 苗字 ランキング (15위)</td><td class="vol">1,100</td><td><span class="badge badge-mid">15위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">93</td><td>椿の花咲く頃 (1위)</td><td class="vol">5,700</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
+            <tr><td class="num">94</td><td>ロッテ マート (16위)</td><td class="vol">9,900</td><td><span class="badge badge-mid">16위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">95</td><td>韓国 カフェ (25위)</td><td class="vol">12,100</td><td><span class="badge badge-low">25위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">96</td><td>キング ザ ランド ロケ 地 (var)</td><td class="vol">480</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
+            <tr><td class="num">97</td><td>ジェニー v 熱愛写真</td><td class="vol">210</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
+            <tr><td class="num">98</td><td>ヒュンダイ ソウル フロア マップ</td><td class="vol">590</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">99</td><td>韓国 ブランド (27위)</td><td class="vol">9,900</td><td><span class="badge badge-low">27위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">100</td><td>naver map (5위)</td><td class="vol">8,100</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+          </tbody>
+        </table>
         <div class="table-note">
-          <strong>일본 특징</strong> — F&B·쇼핑 키워드에서 1위가 많음. 올리브영(49,500 검색량)은 23~24위로 낮아 뷰티 카테고리 진입 여지 있음. 한국 욕·이름 등 정보성 콘텐츠에서 1위 키워드 다수.
+          <strong>일본 특징</strong> — F&B·쇼핑 키워드에서 1위가 많음. 올리브영(49,500 검색량)은 23~24위로 낮아 뷰티 카테고리 진입 여지 있음.
         </div>
       </div>
     </div>
@@ -516,119 +681,116 @@
     <!-- TW -->
     <div id="tab-tw" class="tab-content">
       <div class="table-card">
-        <div class="table-scroll">
-          <table id="table-tw">
-            <thead><tr><th>#</th><th>검색어</th><th>월 검색량</th><th>구글 노출 순위</th><th>성격</th></tr></thead>
-            <tbody>
-              <tr><td class="num">1</td><td>韓元 匯率 (원화 환율)</td><td class="vol">74,000</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">2</td><td>韓幣 (원화)</td><td class="vol">74,000</td><td><span class="badge badge-mid">7위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">3</td><td>韓幣 匯率</td><td class="vol">60,500</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">4</td><td>韓幣匯率</td><td class="vol">60,500</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">5</td><td>韓幣換算</td><td class="vol">60,500</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">6</td><td>韓元匯率</td><td class="vol">60,500</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">7</td><td>釜山天氣 (부산 날씨)</td><td class="vol">40,500</td><td><span class="badge badge-mid">12위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">8</td><td>釜山 天氣</td><td class="vol">27,800</td><td><span class="badge badge-mid">11위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">9</td><td>汗蒸幕 (찜질방)</td><td class="vol">33,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-beauty">웰니스</span></td></tr>
-              <tr><td class="num">10</td><td>汗蒸幕</td><td class="vol">27,800</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-beauty">웰니스</span></td></tr>
-              <tr><td class="num">11</td><td>汗 蒸 幕</td><td class="vol">33,100</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-beauty">웰니스</span></td></tr>
-              <tr><td class="num">12</td><td>汗蒸幕 (6위)</td><td class="vol">27,800</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-beauty">웰니스</span></td></tr>
-              <tr><td class="num">13</td><td>首爾 天氣 (서울 날씨)</td><td class="vol">27,800</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">14</td><td>韓國必買 (한국 필수 구매)</td><td class="vol">27,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">15</td><td>橋村 炸 雞 (교촌치킨)</td><td class="vol">22,200</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">16</td><td>韓國天氣 (한국 날씨)</td><td class="vol">20,100</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">17</td><td>z世代 (Z세대)</td><td class="vol">20,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">18</td><td>飯捲 (김밥)</td><td class="vol">40,500</td><td><span class="badge badge-mid">17위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">19</td><td>辛 拉麵 (신라면)</td><td class="vol">18,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">20</td><td>辛拉麵</td><td class="vol">14,800</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">21</td><td>首爾機票 (서울 항공권)</td><td class="vol">18,100</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">22</td><td>kpop</td><td class="vol">14,800</td><td><span class="badge badge-low">30위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
-              <tr><td class="num">23</td><td>韓國女團 (한국 걸그룹)</td><td class="vol">8,000</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
-              <tr><td class="num">24</td><td>韓國 女 團</td><td class="vol">6,600</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
-              <tr><td class="num">25</td><td>韓國 時差 (한국 시차)</td><td class="vol">8,000</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">26</td><td>景 福 宮 (경복궁)</td><td class="vol">18,100</td><td><span class="badge badge-mid">17위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">27</td><td>薩 滿 (무속인)</td><td class="vol">8,000</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">28</td><td>首爾 塔 (남산타워)</td><td class="vol">8,000</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">29</td><td>韓國 匯率</td><td class="vol">4,400</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">30</td><td>egg drop</td><td class="vol">6,600</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">31</td><td>egg drop (3위)</td><td class="vol">6,600</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">32</td><td>韓國 電壓 (한국 전압)</td><td class="vol">6,600</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">33</td><td>韓國 插座 (한국 콘센트)</td><td class="vol">9,900</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">34</td><td>韓國 插座 (4위)</td><td class="vol">9,900</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">35</td><td>1988 (응답하라 1988)</td><td class="vol">6,600</td><td><span class="badge badge-mid">15위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
-              <tr><td class="num">36</td><td>naver map</td><td class="vol">40,500</td><td><span class="badge badge-mid">9위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">37</td><td>樂天 超市 (롯데마트)</td><td class="vol">12,100</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">38</td><td>樂天超市</td><td class="vol">10,800</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">39</td><td>韓國 插頭 (한국 어댑터)</td><td class="vol">12,100</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">40</td><td>韓國 轉 接 頭 (한국 어댑터)</td><td class="vol">10,800</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">41</td><td>韓國 轉 接 頭 (5위)</td><td class="vol">10,800</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">42</td><td>poca (포카)</td><td class="vol">9,900</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
-              <tr><td class="num">43</td><td>韓元 (원화)</td><td class="vol">49,500</td><td><span class="badge badge-mid">13위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">44</td><td>韓國泡麵 (한국 라면)</td><td class="vol">9,900</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">45</td><td>汝矣島現代百貨 (여의도 현대백화점)</td><td class="vol">2,400</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">46</td><td>汝矣島 現代百貨</td><td class="vol">1,900</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">47</td><td>汝矣島現代百貨 (var)</td><td class="vol">1,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">48</td><td>韓國炸雞 (한국 치킨)</td><td class="vol">4,400</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">49</td><td>明 洞 美食 (명동 맛집)</td><td class="vol">4,400</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">50</td><td>明洞美食 (1위)</td><td class="vol">6,600</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">51</td><td>明洞美食 (3위)</td><td class="vol">6,600</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">52</td><td>誕生 花 (탄생화)</td><td class="vol">590</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">53</td><td>creatrip</td><td class="vol">1,500</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">브랜드</span></td></tr>
-              <tr><td class="num">54</td><td>creatrip 匯率</td><td class="vol">480</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">55</td><td>韓幣 即時 匯率 (실시간 환율)</td><td class="vol">1,300</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">56</td><td>韓幣即時匯率</td><td class="vol">590</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">57</td><td>換錢 所 (환전소)</td><td class="vol">1,600</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">58</td><td>換錢所</td><td class="vol">1,500</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">59</td><td>換錢 所 (2위)</td><td class="vol">1,600</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">60</td><td>明 洞 大使 館 匯率 (명동 대사관 환율)</td><td class="vol">590</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">61</td><td>韓元換算</td><td class="vol">9,900</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">62</td><td>韓元 換算</td><td class="vol">5,700</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">63</td><td>韓幣 換算</td><td class="vol">49,500</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">64</td><td>仁川 機場 第一 航廈 (인천 T1)</td><td class="vol">720</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">65</td><td>仁川 機場 巴士 (인천공항 버스)</td><td class="vol">1,500</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">66</td><td>首爾 機場 巴士 (서울 공항 버스)</td><td class="vol">320</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">67</td><td>ktx</td><td class="vol">5,400</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">68</td><td>石鍋 拌 飯 (돌솥비빔밥)</td><td class="vol">18,100</td><td><span class="badge badge-mid">13위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">69</td><td>韓國燒酒 (한국 소주)</td><td class="vol">5,400</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">70</td><td>韓國 燒酒</td><td class="vol">3,600</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">71</td><td>韓國 棉 被 (한국 이불)</td><td class="vol">5,700</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">72</td><td>韓國啤酒 (한국 맥주)</td><td class="vol">660</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">73</td><td>珍 島 犬 (진돗개)</td><td class="vol">1,600</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">74</td><td>西門 市場 (서문시장)</td><td class="vol">3,600</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">75</td><td>韓國 品牌 (한국 브랜드)</td><td class="vol">1,500</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">76</td><td>韓國 潮 牌 (한국 스트릿 브랜드)</td><td class="vol">2,400</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">77</td><td>潮牌 (스트릿 브랜드)</td><td class="vol">4,400</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">78</td><td>bbq 炸 雞 (BBQ치킨)</td><td class="vol">22,400</td><td><span class="badge badge-mid">12위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">79</td><td>青春 紀錄 (청춘기록)</td><td class="vol">9,900</td><td><span class="badge badge-mid">12위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
-              <tr><td class="num">80</td><td>韓國 代購 (한국 구매대행)</td><td class="vol">5,400</td><td><span class="badge badge-mid">8위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">81</td><td>too cool for school</td><td class="vol">4,400</td><td><span class="badge badge-mid">7위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
-              <tr><td class="num">82</td><td>梨 泰 院 (이태원)</td><td class="vol">12,100</td><td><span class="badge badge-mid">19위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">83</td><td>衣 袖 紅 鑲 邊 (옷소매 붉은 끝동)</td><td class="vol">12,100</td><td><span class="badge badge-mid">13위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
-              <tr><td class="num">84</td><td>香蕉 牛奶 (바나나우유)</td><td class="vol">4,400</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">85</td><td>韓國 天氣 (한국날씨 4위)</td><td class="vol">8,000</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">86</td><td>e arrival card (입국카드)</td><td class="vol">3,100</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
-              <tr><td class="num">87</td><td>韓戰 (한국전쟁)</td><td class="vol">6,600</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">88</td><td>韓 戰</td><td class="vol">6,600</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">정보성</span></td></tr>
-              <tr><td class="num">89</td><td>樂天超市 首爾站 (롯데마트 서울역)</td><td class="vol">480</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
-              <tr><td class="num">90</td><td>明 洞 海苔 飯 捲 (명동 김밥)</td><td class="vol">6,600</td><td><span class="badge badge-mid">7위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">91</td><td>韓元換算 (5위)</td><td class="vol">9,900</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
-              <tr><td class="num">92</td><td>韓國 跨 年 演唱 會 (한국 연말 콘서트)</td><td class="vol">170</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
-              <tr><td class="num">93</td><td>韓國 啤酒 (맥주)</td><td class="vol">660</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">94</td><td>辛 拉麵 (1위)</td><td class="vol">18,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">95</td><td>辛拉麵 (1위)</td><td class="vol">14,800</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">96</td><td>首爾 天氣 (5위)</td><td class="vol">27,800</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">97</td><td>韓國 插座 (2위)</td><td class="vol">9,900</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-              <tr><td class="num">98</td><td>韓國女團 (3위)</td><td class="vol">8,000</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
-              <tr><td class="num">99</td><td>韓國 燒酒 (4위)</td><td class="vol">3,600</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
-              <tr><td class="num">100</td><td>韓國 天氣 (4위)</td><td class="vol">20,100</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">실용 정보</span></td></tr>
-            </tbody>
-          </table>
-        </div>
+        <table>
+          <thead><tr><th>#</th><th>검색어</th><th>월 검색량</th><th>노출 순위</th><th>성격</th></tr></thead>
+          <tbody>
+            <tr><td class="num">1</td><td>韓元 匯率 (원화 환율)</td><td class="vol">74,000</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">2</td><td>韓幣 (원화)</td><td class="vol">74,000</td><td><span class="badge badge-mid">7위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">3</td><td>韓幣 匯率</td><td class="vol">60,500</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">4</td><td>韓幣匯率</td><td class="vol">60,500</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">5</td><td>韓幣換算</td><td class="vol">60,500</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">6</td><td>韓元匯率</td><td class="vol">60,500</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">7</td><td>飯捲 (김밥)</td><td class="vol">40,500</td><td><span class="badge badge-mid">17위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">8</td><td>釜山天氣 (부산 날씨)</td><td class="vol">40,500</td><td><span class="badge badge-mid">12위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">9</td><td>naver map</td><td class="vol">40,500</td><td><span class="badge badge-mid">9위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">10</td><td>汗蒸幕 (찜질방) 1위</td><td class="vol">33,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-beauty">웰니스</span></td></tr>
+            <tr><td class="num">11</td><td>汗 蒸 幕 6위</td><td class="vol">33,100</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-beauty">웰니스</span></td></tr>
+            <tr><td class="num">12</td><td>首爾 天氣 (서울 날씨)</td><td class="vol">27,800</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">13</td><td>汗蒸幕 1위 (var)</td><td class="vol">27,800</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-beauty">웰니스</span></td></tr>
+            <tr><td class="num">14</td><td>汗蒸幕 6위 (var)</td><td class="vol">27,800</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-beauty">웰니스</span></td></tr>
+            <tr><td class="num">15</td><td>釜山 天氣 11위</td><td class="vol">27,800</td><td><span class="badge badge-mid">11위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">16</td><td>韓國必買 (한국 필수 구매)</td><td class="vol">27,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">17</td><td>bbq 炸 雞 (BBQ치킨)</td><td class="vol">22,400</td><td><span class="badge badge-mid">12위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">18</td><td>z世代 (Z세대)</td><td class="vol">20,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">19</td><td>韓國天氣 (한국 날씨)</td><td class="vol">20,100</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">20</td><td>辛 拉麵 (신라면) 1위</td><td class="vol">18,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">21</td><td>首爾機票 (서울 항공권)</td><td class="vol">18,100</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">22</td><td>石鍋 拌 飯 (돌솥비빔밥)</td><td class="vol">18,100</td><td><span class="badge badge-mid">13위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">23</td><td>景 福 宮 (경복궁)</td><td class="vol">18,100</td><td><span class="badge badge-mid">17위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">24</td><td>辛拉麵 1위</td><td class="vol">14,800</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">25</td><td>kpop</td><td class="vol">14,800</td><td><span class="badge badge-low">30위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
+            <tr><td class="num">26</td><td>梨 泰 院 (이태원)</td><td class="vol">12,100</td><td><span class="badge badge-mid">19위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">27</td><td>衣 袖 紅 鑲 邊 (옷소매 붉은 끝동)</td><td class="vol">12,100</td><td><span class="badge badge-mid">13위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
+            <tr><td class="num">28</td><td>樂天 超市 (롯데마트) 4위</td><td class="vol">12,100</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">29</td><td>韓國 插頭 (어댑터)</td><td class="vol">12,100</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">30</td><td>韓幣 換算</td><td class="vol">49,500</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">31</td><td>韓元 (원화)</td><td class="vol">49,500</td><td><span class="badge badge-mid">13위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">32</td><td>韓國 插座 (콘센트) 2위</td><td class="vol">9,900</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">33</td><td>韓國 插座 4위</td><td class="vol">9,900</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">34</td><td>韓國泡麵 (라면)</td><td class="vol">9,900</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">35</td><td>poca (포카)</td><td class="vol">9,900</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
+            <tr><td class="num">36</td><td>韓元換算</td><td class="vol">9,900</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">37</td><td>青春 紀錄 (청춘기록)</td><td class="vol">9,900</td><td><span class="badge badge-mid">12위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
+            <tr><td class="num">38</td><td>樂天超市 (4위)</td><td class="vol">10,800</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">39</td><td>韓國 轉 接 頭 1위</td><td class="vol">10,800</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">40</td><td>韓國 轉 接 頭 5위</td><td class="vol">10,800</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">41</td><td>egg drop 2위</td><td class="vol">6,600</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">42</td><td>egg drop 3위</td><td class="vol">6,600</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">43</td><td>韓國 電壓 (전압)</td><td class="vol">6,600</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">44</td><td>1988 (응답하라)</td><td class="vol">6,600</td><td><span class="badge badge-mid">15위</span></td><td><span class="tag tag-kpop">드라마</span></td></tr>
+            <tr><td class="num">45</td><td>明洞美食 (명동 맛집) 1위</td><td class="vol">6,600</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">46</td><td>明洞美食 3위</td><td class="vol">6,600</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">47</td><td>韓 戰 (한국전쟁) 5위</td><td class="vol">6,600</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">48</td><td>韓戰 4위</td><td class="vol">6,600</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">49</td><td>韓國 燒酒 (소주) 4위</td><td class="vol">3,600</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">50</td><td>橋村 炸 雞 (교촌치킨)</td><td class="vol">22,200</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">51</td><td>韓元換算 (4위)</td><td class="vol">5,700</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">52</td><td>韓國 棉 被 (이불)</td><td class="vol">5,700</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">53</td><td>韓國燒酒 (소주) 6위</td><td class="vol">5,400</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">54</td><td>韓國 代購 (구매대행)</td><td class="vol">5,400</td><td><span class="badge badge-mid">8위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">55</td><td>ktx</td><td class="vol">5,400</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">56</td><td>韓國 匯率</td><td class="vol">4,400</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">57</td><td>香蕉 牛奶 (바나나우유)</td><td class="vol">4,400</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">58</td><td>潮牌 (스트릿 브랜드)</td><td class="vol">4,400</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">59</td><td>too cool for school</td><td class="vol">4,400</td><td><span class="badge badge-mid">7위</span></td><td><span class="tag tag-beauty">뷰티</span></td></tr>
+            <tr><td class="num">60</td><td>明 洞 美食 (3위 var)</td><td class="vol">4,400</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">61</td><td>韓國炸雞 (치킨)</td><td class="vol">4,400</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">62</td><td>e arrival card (입국카드)</td><td class="vol">3,100</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">63</td><td>西門 市場 (서문시장)</td><td class="vol">3,600</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">64</td><td>韓國 燒酒 (var)</td><td class="vol">3,600</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">65</td><td>韓國 品牌 (브랜드)</td><td class="vol">1,500</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">66</td><td>仁川 機場 巴士 (공항버스)</td><td class="vol">1,500</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">67</td><td>換錢 所 (환전소) 1위</td><td class="vol">1,600</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">68</td><td>換錢所 1위</td><td class="vol">1,500</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">69</td><td>換錢 所 2위</td><td class="vol">1,600</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">70</td><td>珍 島 犬 (진돗개)</td><td class="vol">1,600</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">71</td><td>韓幣 即時 匯率 (실시간)</td><td class="vol">1,300</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">72</td><td>creatrip</td><td class="vol">1,500</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">브랜드</span></td></tr>
+            <tr><td class="num">73</td><td>汝矣島現代百貨 (현대백화점) 1위</td><td class="vol">2,400</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">74</td><td>汝矣島 現代百貨 1위</td><td class="vol">1,900</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">75</td><td>汝矣島現代百貨 (var)</td><td class="vol">1,100</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">76</td><td>韓國 潮 牌</td><td class="vol">2,400</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">77</td><td>誕生 花 (탄생화)</td><td class="vol">590</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">78</td><td>creatrip 匯率</td><td class="vol">480</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">79</td><td>韓幣即時匯率</td><td class="vol">590</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">80</td><td>明 洞 大使 館 匯率 (명동환전)</td><td class="vol">590</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">81</td><td>樂天超市 首爾站 (롯데마트 서울역)</td><td class="vol">480</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-shopping">쇼핑</span></td></tr>
+            <tr><td class="num">82</td><td>首爾 機場 巴士</td><td class="vol">320</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">83</td><td>韓國 跨 年 演唱 會 (연말 콘서트)</td><td class="vol">170</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
+            <tr><td class="num">84</td><td>仁川 機場 第一 航廈 (인천 T1)</td><td class="vol">720</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">85</td><td>薩 滿 (무속인)</td><td class="vol">8,000</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">정보</span></td></tr>
+            <tr><td class="num">86</td><td>韓國 時差 (시차)</td><td class="vol">8,000</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">87</td><td>首爾 塔 (남산타워)</td><td class="vol">8,000</td><td><span class="badge badge-mid">6위</span></td><td><span class="tag tag-travel">여행</span></td></tr>
+            <tr><td class="num">88</td><td>韓國女團 (걸그룹) 3위</td><td class="vol">8,000</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
+            <tr><td class="num">89</td><td>韓國 天氣 (4위)</td><td class="vol">8,000</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">90</td><td>韓元 換算</td><td class="vol">5,700</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">91</td><td>韓國 女 團 3위</td><td class="vol">6,600</td><td><span class="badge badge-top">3위</span></td><td><span class="tag tag-kpop">K-POP</span></td></tr>
+            <tr><td class="num">92</td><td>明 洞 海苔 飯 捲 (명동 김밥)</td><td class="vol">6,600</td><td><span class="badge badge-mid">7위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">93</td><td>韓國啤酒 (맥주)</td><td class="vol">660</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">94</td><td>韓國 啤酒 (var)</td><td class="vol">660</td><td><span class="badge badge-top">1위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">95</td><td>韓國炸雞 (var)</td><td class="vol">4,400</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">96</td><td>首爾 天氣 (5위)</td><td class="vol">27,800</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">97</td><td>韓國 插座 (2위 var)</td><td class="vol">9,900</td><td><span class="badge badge-top">2위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+            <tr><td class="num">98</td><td>韓元換算 (5위)</td><td class="vol">9,900</td><td><span class="badge badge-mid">5위</span></td><td><span class="tag tag-exchange">환율</span></td></tr>
+            <tr><td class="num">99</td><td>韓國 燒酒 (var2)</td><td class="vol">3,600</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-food">F&B</span></td></tr>
+            <tr><td class="num">100</td><td>韓國 天氣 (var)</td><td class="vol">20,100</td><td><span class="badge badge-mid">4위</span></td><td><span class="tag tag-info">실용</span></td></tr>
+          </tbody>
+        </table>
         <div class="table-note">
-          <strong>대만 특징</strong> — 환율 키워드(60K~74K 검색량)가 압도적. 크리트립 환율 페이지 하나가 대만 트래픽의 핵심. 찜질방(汗蒸幕) 1위는 KBS 웰니스 카테고리와 직접 겹치는 영역.
+          <strong>대만 특징</strong> — 환율 키워드(60K~74K 검색량)가 압도적. 크리트립 환율 페이지 하나가 대만 트래픽 핵심. 찜질방(汗蒸幕) 1위는 KBS 웰니스와 직접 겹치는 영역.
         </div>
       </div>
     </div>
-
   </div>
 
 </div>
@@ -644,14 +806,13 @@ new Chart(document.getElementById('trafficChart'), {
     datasets: [{
       label: '월 유입 클릭',
       data: traffic,
-      borderColor: '#2952cc',
-      backgroundColor: 'rgba(41,82,204,0.07)',
+      borderColor: '#4f7cff',
+      backgroundColor: 'rgba(79,124,255,0.06)',
       fill: true,
-      tension: 0.35,
-      pointRadius: months.map((m,i) => i >= 9 && i <= 11 ? 6 : 4),
-      pointBackgroundColor: months.map((m,i) => i >= 9 && i <= 11 ? '#2952cc' : '#fff'),
-      pointBorderColor: '#2952cc',
-      pointBorderWidth: 2,
+      tension: 0.4,
+      pointRadius: months.map((m,i) => i >= 9 && i <= 11 ? 6 : 3),
+      pointBackgroundColor: months.map((m,i) => i >= 9 && i <= 11 ? '#4f7cff' : 'rgba(79,124,255,0.5)'),
+      pointBorderColor: 'transparent',
       borderWidth: 2,
       pointHoverRadius: 6
     }]
@@ -661,17 +822,25 @@ new Chart(document.getElementById('trafficChart'), {
     maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
-      tooltip: { callbacks: { label: ctx => '유입 클릭: ' + ctx.parsed.y.toLocaleString() + '회' } }
+      tooltip: {
+        backgroundColor: '#1e1e1e',
+        borderColor: 'rgba(255,255,255,0.1)',
+        borderWidth: 1,
+        titleColor: '#9a9690',
+        bodyColor: '#f0ede8',
+        padding: 10,
+        callbacks: { label: ctx => '유입 클릭: ' + ctx.parsed.y.toLocaleString() + '회' }
+      }
     },
     scales: {
       x: {
-        grid: { color: 'rgba(0,0,0,0.05)' },
-        ticks: { color: '#9d9b94', font: { size: 11, family: 'DM Mono' }, autoSkip: false, maxRotation: 0 }
+        grid: { color: 'rgba(255,255,255,0.04)' },
+        ticks: { color: '#5a5754', font: { size: 11, family: 'DM Mono' }, autoSkip: false, maxRotation: 0 }
       },
       y: {
-        grid: { color: 'rgba(0,0,0,0.05)' },
+        grid: { color: 'rgba(255,255,255,0.04)' },
         ticks: {
-          color: '#9d9b94',
+          color: '#5a5754',
           font: { size: 11, family: 'DM Mono' },
           callback: v => v >= 1000 ? (v/1000).toFixed(0) + 'K' : v
         },
@@ -695,8 +864,7 @@ function filterKeywords(val) {
   const activeTab = document.querySelector('.tab-content.active');
   const rows = activeTab.querySelectorAll('tbody tr');
   rows.forEach(row => {
-    const text = row.textContent.toLowerCase();
-    row.style.display = text.includes(q) ? '' : 'none';
+    row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
   });
 }
 </script>
